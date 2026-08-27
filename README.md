@@ -1,8 +1,7 @@
 # Portfolio — Abdulrhman Mohamed Gomaa
 
-Personal portfolio site. Plain HTML, CSS and vanilla JavaScript — no framework, no build step,
-no `npm install`. The YouTube and Clash Royale sections deliberately use their own colours and
-typefaces so they read as separate worlds from the rest of the page.
+A personal site built as a technical drawing: a sheet grid, a title block, hairline schematics.
+Plain HTML, CSS and vanilla JavaScript. No framework, no build step, no `npm install`.
 
 **All the content lives in one file: [`js/data.js`](js/data.js).** You should almost never need to
 open `index.html`.
@@ -77,26 +76,25 @@ Log in on their site with the same email, find your form's settings, and turn on
 
 ---
 
-## 2. Check the YouTube section
+## 2. Fix the YouTube section
 
-I rewrote how this works. Three things changed:
+Two separate things here.
 
-- **The channel picture is now fetched automatically** from your channel page, so it stays current on
-  its own. `Images/yeagx_logo.jpg` is only the placeholder shown for the split second before it
-  arrives (and if the fetch fails). Replacing that file is optional now, but still worth doing.
-- **The proxies are raced in parallel** instead of one after another, and the timeout went from 7 to
-  14 seconds. The old 7-second limit was aborting requests that would have succeeded — that is the
-  most likely reason it said "Feed unreachable".
-- **The recent-videos list** shows the three uploads under the latest one, with a red `NEW` badge on
-  anything posted in the last week.
+**a) Your channel picture is out of date.** Save your current channel avatar as a `.jpg` and replace
+the file `Images/yeagx_logo.jpg` with it, keeping the same filename. *(The site also tries to pull
+your real avatar out of the RSS feed automatically, so when the feed loads, it corrects itself.)*
 
-**Open the site on your own machine and look at the label in the top right of the YouTube panel.**
-`live` means the feed loaded. I still cannot test this myself — the environment I build in blocks
-every one of these proxies.
+**b) "Feed unreachable".** The section reads your channel's public RSS feed. Browsers are not allowed
+to fetch that address directly, so the site goes through a free public relay ("CORS proxy") to get
+it. Those relays are free, so they are unreliable — the site already tries four of them in turn.
 
-If it says `offline`, add a safety net so a visitor never sees an error box:
+I could not test this properly: the environment I built it in blocks all four relays, so I do not
+know whether it fails for you too. **Open the site on your own machine and look.** If it says
+`live`, everything is fine and you can ignore this.
 
-1. Open one of your videos. The address looks like
+If it says `offline`, give it a safety net so a visitor never sees an error box:
+
+1. Open one of your videos on YouTube. The address looks like
    `https://www.youtube.com/watch?v=`**`dQw4w9WgXcQ`** — copy the part after `v=`.
 2. In `js/data.js`, find `fallbackVideoId: ''` inside the `YOUTUBE` block and paste it in:
 
@@ -104,7 +102,9 @@ If it says `offline`, add a safety net so a visitor never sees an error box:
    fallbackVideoId: 'dQw4w9WgXcQ',
    ```
 
-The live feed still wins whenever it works.
+Now if the feed is down, that video plays instead. When the feed works, the feed always wins.
+
+---
 
 ## 3. Update the Clash Royale numbers
 
@@ -203,7 +203,7 @@ a branch → Branch: `main`, folder: `/ (root)` → Save**. After a minute the s
 ## After you deploy: the caching gotcha
 
 Browsers cache CSS and JS aggressively. When you change a style and it does not appear, that is why.
-The stylesheet and script links in `index.html` end with `?v=5`. **Bump that number** (to `?v=6`, and
+The stylesheet and script links in `index.html` end with `?v=3`. **Bump that number** (to `?v=4`, and
 so on) whenever you change a CSS or JS file, and every visitor gets the new version immediately.
 
 ---
@@ -220,24 +220,16 @@ Everything is in `js/data.js`:
 | `ALSO` | The three one-line projects |
 | `TOOLKIT` | The skills table. Add `learning: true` to mark something as still being learned |
 | `TRAINING` | SIC, DEPI, ITI, IcTHub |
-| `SIC` | The full 44-session agenda — module ranges, the "here now" marker and the "next session" line are all derived from it |
+| `AWARD` | ECPC |
+| `SIC` | The syllabus list, and therefore the "here now" marker |
 | `YOUTUBE` | Channel details and the fallback video |
 | `CLASH` | Stats and deck |
 
-### The syllabus updates itself
+### The "here now" marker moves by itself
 
-`SIC.sessions` holds every session from the official BD 802 agenda with its real date. At page load
-the site works out, from today's date alone:
-
-- which module you are in (highlighted, with the **here now** badge)
-- which modules are finished
-- inside the current module, which individual sessions are already behind you
-- what the next session is and when
-
-You never edit it as the course runs. Today it resolves to *module 5, Hive & ingestion*, with
-*Apache Hive #1* done and *Apache Hive #2 on 30 Aug* next.
-
-When you finish the capstone, add it to `WORK` as a third project — that is the edit that will
+The syllabus module highlighted in orange is worked out from today's date against the `start` and
+`end` dates in the `SIC` block. You do not have to update it as the course progresses. When you
+finish the capstone project, add it to `WORK` as a third project — that is the edit that will
 actually matter.
 
 ### Things deliberately left out
@@ -264,8 +256,8 @@ YouTube feed will be blocked by browser security rules, so use the command above
 ```
 index.html          markup + inline SVG icons (no icon-font CDN)
 CSS/
-  base.css          tokens, rail, hero, schematic, shared pieces
-  sections.css      content sections + the YouTube / Clash zones
+  sheet.css         tokens, drafting grid, edge rail, hero, schematic
+  content.css       the seven content sheets
 js/
   data.js           ← everything you edit lives here
   render.js         builds the page from data.js, rail + scroll
