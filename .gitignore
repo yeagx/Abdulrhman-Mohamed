@@ -1,0 +1,8 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+
+# local dev tooling (preview server config, not part of the site)
+.claude/
