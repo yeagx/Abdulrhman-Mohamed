@@ -133,6 +133,10 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <p class="hero__origin">
               <span>Cairo, Egypt</span>
               <b id="heroNow">—</b>
+              <!-- The wall clock, filled by work.js. Left empty in the
+                   markup and hidden while empty, so with scripts off the
+                   origin line closes up rather than showing a dead slot. -->
+              <span class="hero__clk num" id="heroClk"></span>
               <span class="ar" lang="ar" dir="rtl">القاهرة</span>
             </p>
 
@@ -175,8 +179,8 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
               interesting problems were never in the chart. They were further back. The data was wrong, or arrived in
               a shape nobody could query, or could not be trusted enough to act on.</p>
 
-            <p>So I moved upstream. I built a warehouse for four seasons of Formula 1 data to learn schema design
-              properly, and I am now on the <strong>Samsung Innovation Campus big data track</strong> filling in the
+            <p>So I moved upstream. My graduation project for that track was a warehouse for four seasons of
+              Formula 1 data, built with five others, and it is where I learned schema design properly — and I am now on the <strong>Samsung Innovation Campus big data track</strong> filling in the
               parts I had been working around: distributed processing, ingestion tooling, streaming and cloud.</p>
 
             <p>Alongside that I spent the summer interning at <strong>Finnovate</strong>, part of ICT Misr Group,
@@ -230,7 +234,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         <div class="kit__key">
           <i><span class="tg">tool</span> I have used this</i>
           <i><span class="tg tg--now">tool</span> currently learning it</i>
+          <i class="kit__hint">pick one to see what runs on it</i>
         </div>
+
+        <!-- What the current selection matched. role="status" so the
+             count is announced rather than only drawn; it stays empty
+             and hidden until something is actually selected. -->
+        <div class="kit__sel" id="kitSel" role="status" aria-live="polite" hidden></div>
 
         <div class="kit" id="kit"></div>
       </section>
@@ -296,7 +306,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <div class="blk">
             <div class="blk__hd">
               Message form
-              <span class="r" id="formState">checking</span>
+              <span class="r" id="formState" role="status" aria-live="polite">checking</span>
             </div>
             <div class="blk__bd">
               <form class="frm" id="cForm" novalidate>
@@ -304,12 +314,12 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
                   <div class="fld">
                     <label for="cname">Name <span class="rq">*</span></label>
                     <input type="text" id="cname" name="name" autocomplete="name" placeholder="Your name" required>
-                    <div class="fld__e" id="e-cname"></div>
+                    <div class="fld__e" id="e-cname" aria-live="polite"></div>
                   </div>
                   <div class="fld">
                     <label for="cemail">Email <span class="rq">*</span></label>
                     <input type="email" id="cemail" name="email" autocomplete="email" placeholder="you@company.com" required>
-                    <div class="fld__e" id="e-cemail"></div>
+                    <div class="fld__e" id="e-cemail" aria-live="polite"></div>
                   </div>
                 </div>
 
@@ -329,7 +339,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
                     <span style="margin-left:auto" id="msgCount">0</span>
                   </label>
                   <textarea id="cmsg" name="message" placeholder="A couple of lines about what you need." required></textarea>
-                  <div class="fld__e" id="e-cmsg"></div>
+                  <div class="fld__e" id="e-cmsg" aria-live="polite"></div>
                 </div>
 
                 <div class="hp" aria-hidden="true">
@@ -359,6 +369,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
     <footer class="ft">
       <div class="wrap ft__in">
         <span>© <span id="yr"></span> Abdulrhman Mohamed Gomaa · built by hand, no framework</span>
+        <!-- The jog only exists for someone with a keyboard, so it is
+             only mentioned to someone who has one. -->
+        <span class="ft__key"><kbd>j</kbd><kbd>k</kbd> step through the sections</span>
         <div class="ft__lnks">
           <a href="https://github.com/yeagx" target="_blank" rel="noopener">GitHub</a>
           <a href="https://www.linkedin.com/in/abdulrhman-mohamed-da" target="_blank" rel="noopener">LinkedIn</a>

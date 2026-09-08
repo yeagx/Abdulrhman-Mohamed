@@ -207,6 +207,43 @@ strong, b { font-variation-settings: 'wdth' 100, 'wght' 700; }
   font-variation-settings: 'wdth' 86, 'wght' 800;
 }
 
+/* A tag is a stamped part number, and the same part turns up in
+   several machines. Pointing at one lights every place it is used
+   — the toolkit row, the current role, each project that runs on
+   it — so the page shows its own wiring. JS only toggles the
+   class; the colour is here (rule 8). */
+.tg--hot {
+  background: var(--field);
+  color: var(--on-field);
+  font-variation-settings: 'wdth' 86, 'wght' 800;
+}
+
+/* The toolkit's tags are real buttons: a part number selects a
+   line, and the racks filter to what actually runs on it. */
+button.tg {
+  font-family: var(--text);
+  line-height: inherit;
+  border-radius: 0;
+  appearance: none;
+  cursor: pointer;
+}
+button.tg:hover { background: var(--signal); color: var(--ink); }
+
+/* the selected part: the loudest a tag ever gets, and it outranks
+   both the learning mark and the cross-highlight */
+.tg--sel,
+button.tg--sel:hover {
+  background: var(--ink);
+  color: var(--paper);
+  font-variation-settings: 'wdth' 86, 'wght' 800;
+}
+
+/* Filtered out by a selection: still readable, still focusable,
+   never hidden. The rack has not gone anywhere — it just is not
+   the line you picked. No transition: the panel switches, it does
+   not dissolve. */
+.dim { opacity: .42; filter: grayscale(1); }
+
 /* the one live thing, wherever it appears in prose */
 .live {
   display: inline-block;
@@ -270,6 +307,31 @@ strong, b { font-variation-settings: 'wdth' 100, 'wght' 700; }
 }
 
 .rail:hover, .rail:focus-within { clip-path: inset(0 0 0 0); }
+
+/* ---------- the position gauge ----------
+   How far through the document you are, read off the corridor
+   wall. It is a pseudo-element on purpose: the rail's markup is
+   byte-identical in both documents so the transition can hold it
+   perfectly still, and a gauge is not worth spending that on.
+
+   core.js's existing rAF scroll pass writes --prog (0–1) and
+   nothing else — no colour ever enters JavaScript (rule 8). It
+   reads --chrome-*, so the corridor looks the same in both rooms
+   (rule 4). Deliberately untransitioned: it tracks the scroll
+   frame by frame, and easing it would only make it lag. */
+.rail::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: var(--course);
+  bottom: 0;
+  z-index: 3;
+  width: var(--rule);
+  background: var(--chrome-hd);
+  transform: scaleY(var(--prog, 0));
+  transform-origin: 50% 0;
+  pointer-events: none;
+}
 
 .rail__top {
   display: flex;
@@ -475,7 +537,12 @@ strong, b { font-variation-settings: 'wdth' 100, 'wght' 700; }
   padding: 0 var(--s5);
 }
 
-.sheet { padding: var(--s6) 0 0; }
+/* padding-TOP, never the shorthand. Every section is also a .wrap,
+   and `padding: x 0 0` here silently zeroes the horizontal gutter
+   .wrap just set — which is invisible above 1200px, where the
+   max-width's auto margins happen to stand in for it, and full-bleed
+   everywhere below. The same trap applies to .hero and .off__hd. */
+.sheet { padding-top: var(--s6); }
 .sheet:last-of-type { padding-bottom: var(--s6); }
 
 /* the section boundary: a bolted ink bar, not a hairline */
@@ -484,6 +551,22 @@ strong, b { font-variation-settings: 'wdth' 100, 'wght' 700; }
   background: var(--ink);
   margin-bottom: var(--s5);
 }
+
+/* The keyline draws itself as you reach the section. This is NOT a
+   third authored moment: it is the shell's own material one floor
+   further down — a clip-path open on the same curve as the rail and
+   the mobile sheet. Nothing else moves. No prose fades, no card
+   staggers; the reading is identical, the building just bolts its
+   own lines in as you walk past.
+
+   core.js adds .draw only when motion is welcome, so with scripts
+   off — or under reduced motion — every rule is simply present.
+   Never hide content in CSS that JavaScript has to come back for. */
+.rule.draw {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path .26s cubic-bezier(.2, 1, .3, 1);
+}
+.rule.draw.in { clip-path: inset(0 0 0 0); }
 
 /* section header — more space above than below */
 .shd { margin-bottom: var(--s5); }
@@ -512,6 +595,34 @@ strong, b { font-variation-settings: 'wdth' 100, 'wght' 700; }
   font-size: 13px;
 }
 .ft__in > span { color: var(--chrome-2); }
+
+/* The jog's only signpost. It exists for a visitor with a keyboard,
+   so it is only shown to one — on a touch device it is an
+   instruction that cannot be followed. */
+.ft__key { display: none; }
+
+@media (hover: hover) and (pointer: fine) {
+  .ft__key {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s1);
+    color: var(--chrome-2);
+    font-size: 11px;
+    font-variation-settings: 'wdth' 82, 'wght' 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+}
+
+.ft__key kbd {
+  padding: 2px 7px;
+  background: var(--chrome-hd);
+  color: var(--chrome-hd-fg);
+  font-family: var(--text);
+  font-size: 11px;
+  font-variation-settings: 'wdth' 82, 'wght' 800;
+  line-height: 1.5;
+}
 
 .ft__lnks { display: flex; flex-wrap: wrap; gap: var(--s3); }
 .ft__lnks a {
@@ -587,6 +698,23 @@ strong, b { font-variation-settings: 'wdth' 100, 'wght' 700; }
     border-bottom: var(--rule) solid var(--chrome);
   }
   .rail:hover, .rail:focus-within { clip-path: none; }
+  /* The gauge lies down with the rail. Two changes it cannot do
+     without: the collapsed bar is safety yellow end to end, so the
+     wall's yellow fill would be invisible on it — it takes the
+     accent instead, which is also the one chrome token the arcade
+     re-points, so the bar nods to its room. And it runs along the
+     TOP edge: at the foot it would sit directly on the bar's own
+     3px bottom keyline and the two would read as one thick line. */
+  .rail::after {
+    top: 0;
+    right: 0;
+    bottom: auto;
+    width: auto;
+    height: var(--rule);
+    background: var(--chrome-acc);
+    transform: scaleX(var(--prog, 0));
+    transform-origin: 0 50%;
+  }
   .rail__top {
     flex: 1 1 auto;
     width: 100%;

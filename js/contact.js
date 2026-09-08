@@ -56,13 +56,13 @@
         <span class="chan__x">Cairo · GMT+2</span>
       </a>`;
 
+    /* core.js owns the clipboard behaviour so "copied" cannot come to
+       mean one thing here and another on a project card. */
     const b = $('#cpMail'), h = $('#cpHint');
-    if (b) b.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(PROFILE.email);
-        h.textContent = 'copied'; h.classList.add('is-ok');
-        setTimeout(() => { h.textContent = 'copy'; h.classList.remove('is-ok'); }, 1800);
-      } catch (_) { window.location.href = 'mailto:' + PROFILE.email; }
+    if (b) b.addEventListener('click', () => {
+      window.SITE.copy(PROFILE.email, h, () => {
+        window.location.href = 'mailto:' + PROFILE.email;
+      });
     });
   }
 
@@ -89,12 +89,22 @@
     cmsg:   { min: 12, msg: 'A little more detail, please.' }
   };
 
+  /* The red ring is only half of it. A field that is wrong has to say
+     so through the accessibility tree as well, and the message has to
+     be attached to the field rather than merely sitting next to it —
+     otherwise a screen reader announces "Name, invalid" with no way to
+     find out what is actually wrong. */
   function mark(id, msg) {
     const el = $('#' + id);
     const f = el ? el.closest('.fld') : null;
     const e = $('#e-' + id);
     if (f) f.classList.toggle('bad', !!msg);
     if (e) e.textContent = msg || '';
+    if (el) {
+      el.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      if (msg) el.setAttribute('aria-describedby', 'e-' + id);
+      else el.removeAttribute('aria-describedby');
+    }
   }
 
   function check(all) {

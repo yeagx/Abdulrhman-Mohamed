@@ -50,7 +50,9 @@
 /* =============================================================
    THE PAGE HEAD — the way back, then what is here.
    ============================================================= */
-.off__hd { padding: var(--s6) 0 var(--s5); }
+/* longhands only: .off__hd is also a .wrap, and the shorthand would
+   zero the horizontal gutter it just set */
+.off__hd { padding-top: var(--s6); padding-bottom: var(--s5); }
 
 /* The return leg. Same shared element as the doorway on the work
    page, so the plate morph reverses symmetrically. The href MUST
@@ -245,6 +247,11 @@
 }
 .yt__it:last-child { border-bottom: 0; }
 .yt__it:hover { background: var(--accent); color: var(--ground); transform: translateX(8px); }
+
+/* the upload currently in the frame — marked where it sits, so the
+   list says what the panel is doing */
+.yt__it.on { background: var(--accent); color: var(--ground); }
+.yt__it.on span span { color: var(--ground); }
 
 .yt__it img {
   width: 112px;

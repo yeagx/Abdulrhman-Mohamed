@@ -62,10 +62,12 @@
     });
   }
 
-  function embed(id, title) {
-    return `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}"
+  /* `auto` is only ever true for a play the visitor just asked for,
+     so autoplay here is a response to a gesture, never an ambush. */
+  function embed(id, title, auto) {
+    return `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}${auto ? '?autoplay=1' : ''}"
       title="${esc(title || 'Video from the YeagX channel')}" loading="lazy"
-      allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowfullscreen></iframe>`;
   }
 
@@ -152,12 +154,52 @@
       const rest = vids.slice(1, 4);
       list.innerHTML = rest.length
         ? rest.map((v) => `
-            <a class="yt__it" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">
+            <a class="yt__it" data-v="${esc(v.id)}"
+               href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">
               <img src="${v.thumb}" alt="" loading="lazy" decoding="async">
               <span><b>${esc(v.title)}</b><span>${rel(v.published)}</span></span>
             </a>`).join('')
         : `<div style="font-size:13px;color:#888;padding:6px 2px">Only one upload on the feed so far.</div>`;
+      picker(vids);
     }
+  }
+
+  /* ---------- the panel is something you operate ----------
+     Picking an upload plays it in the frame that is already sitting
+     there, rather than throwing the visitor out to another tab.
+
+     The rows stay real links to YouTube, and every escape hatch is
+     left open: a modified click, a middle click, and a scripts-off
+     visit all still go to the channel. Playing in place is an
+     enhancement on top of a link that already worked, which is the
+     only way it is allowed to be worth doing. */
+  function picker(vids) {
+    const list = $('#ytList'), frame = $('#ytFrame'), now = $('#ytNow');
+    if (!list || !frame) return;
+
+    list.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+
+      const a = e.target.closest ? e.target.closest('.yt__it') : null;
+      if (!a || !a.dataset.v) return;
+
+      const v = vids.filter((x) => x.id === a.dataset.v)[0];
+      if (!v) return;
+
+      e.preventDefault();
+      frame.innerHTML = embed(v.id, v.title, true);
+
+      if (now) now.innerHTML =
+        `<span class="yt__new">PLAYING</span>
+         <span>${esc(v.title)} · <span style="color:#AAA">${rel(v.published)}</span></span>`;
+
+      list.querySelectorAll('.yt__it').forEach((r) => {
+        const on = r === a;
+        r.classList.toggle('on', on);
+        if (on) r.setAttribute('aria-current', 'true');
+        else r.removeAttribute('aria-current');
+      });
+    });
   }
 
   /* Do not race the proxies while this page is only being speculated.
