@@ -167,6 +167,19 @@ that **opens** on this site opens on a `clip-path`, at every scale:
 | The page transition | `clip-path` on the root snapshot, 420ms |
 | The rail opening | `clip-path` from the collapsed edge, 260ms, with the labels staggered 30–170ms behind it |
 | The mobile sheet dropping | `clip-path` from the top, 240ms |
+| A section's keyline arriving | `clip-path` from the left, 260ms, one `IntersectionObserver` in `core.js` |
+
+The keyline draw is the newest of these and the one most likely to be mistaken for a third
+authored moment, so it is worth being exact about why it is not. **Only the rule draws.** No prose
+fades, no card staggers, nothing translates; the reading experience is identical whether it runs or
+not. It is the same single property, on the same curve, as the other three — the building bolting
+its own lines in as you walk past it, at the smallest scale the material has. A reveal that moved
+*content* would be a third moment, and would have to replace one of the two.
+
+`core.js` adds the `.draw` start state itself rather than letting the stylesheet hold it, so a
+visitor with scripts off never meets a rule clipped to nothing with no script coming to open it,
+and a rule already on screen at load is left alone — arriving somewhere is not the same as being
+there already, and that includes the doorway you land on coming back from the arcade.
 
 The rail is **always** its open width and clipped down to `--edge`; hovering animates the clip.
 Animating `width` would relayout the rail on every frame, and it would make `.page`'s offset
@@ -216,6 +229,81 @@ these are not elements.
 Browsers without cross-document view transitions perform a plain navigation. No error, no console
 warning, nothing to fall back to.
 
+## Interaction
+
+A plant floor is not alive because things drift about on it. It is alive because the machinery is
+**running**, and because it **answers when you touch it**. Everything here is one of those two, or
+it is a control that does real work. Nothing on this page reveals, parallaxes or tilts.
+
+### The press, and its inverse
+
+The feedback vocabulary is still one gesture. `:active` pushes a plate *into* the wall — `+3px`
+translate, offset down to `--drop-in`. Hover on the large plates does the same thing outward:
+`-3px` translate, offset up to `--drop + --drop-in`. Both offsets are derived from the two
+construction tokens rather than written as numbers, so they follow `--drop` down to 5px at the
+narrow breakpoint instead of pretending 9px is a real dimension. Project cards and course plates
+lift; buttons press; rows light. That is the whole set.
+
+Everything that was previously rendered once and never touched again — the manifest, the facts
+strip, the toolkit rows, the timetable, the board's slats — now answers. The board is the one place
+that answers *selectively*: hovering a row lights its status cell, **except** the live row, because
+exactly one thing on this page is running and a hover must not repaint that away.
+
+### The readouts
+
+Real figures, or they are not on the page (rule 6).
+
+- **The shift clock.** Cairo local time, ticking, in the origin line. `Africa/Cairo` is pinned
+  rather than read off the visitor's machine: the figure means *his* local time, which is the whole
+  reason it sits beside "Cairo, Egypt", and it has to stay true for someone reading from Berlin.
+  The tick is aimed at the real second boundary so it cannot drift, and it stops entirely while the
+  tab is hidden. A readout is not an animation — this costs rule 7 nothing.
+- **The rail gauge.** How far through the document you are, down the corridor wall. It rides the
+  scroll pass that already exists rather than opening a second listener, and JavaScript writes one
+  number — `--prog` — with the stylesheet doing everything else. On the collapsed top bar it lies
+  down across the *top* edge and takes `--chrome-acc`: the bar is safety yellow end to end, so the
+  wall's yellow fill would be invisible on it, and at the foot it would merge with the bar's own
+  bottom keyline into one thick line.
+- **Course position.** `session N of M · X%`, off the same agenda dates the timetable already
+  derives, with the bar drawn from the number that is printed beside it so the graphic cannot
+  disagree with the text.
+- **Midnight.** Every date hangs off a `today` computed once at load, so a tab left open overnight
+  would keep yesterday's module marked as running. The page re-derives at the local day boundary
+  and re-renders the three sections that read dates. The board is rebuilt; the arrival is *not*
+  re-run, because it already happened.
+
+### The part index
+
+A tag is a stamped part number, and the same part turns up in several machines. Pointing at one
+lights every place it is used — the toolkit row, the current role, each build that runs on it — so
+the page shows its own wiring instead of leaving a reader to search for it. Selecting one filters
+the racks.
+
+The toolkit's tags are therefore real `<button>`s, not spans: a control that only answers a mouse
+is not a control. The index is built once from what is actually on the page rather than from a
+second copy of the data, so there is no list to keep in step, and one delegated listener covers the
+document rather than one per tag.
+
+Two things it deliberately does **not** do. A filtered-out build is dimmed, never hidden — it stays
+readable, focusable and in the accessibility tree, because the rack has not gone anywhere. And a
+part that no build on this page lists — most of a toolkit, honestly — says so in words rather than
+greying out every rack to prove it. Selecting `Java` and watching the whole section go flat
+punishes a fair question.
+
+### Operating it
+
+- `j` / `k` step section to section, off the same index and the same 150px line the scroll spy
+  uses, so the jog and the rail highlight can never disagree. No modifiers, and never while a form
+  field has focus. Focus moves with the viewport, so a keyboard visitor can carry on tabbing from
+  where they landed. It is mentioned in the footer only where there is a keyboard to use it.
+- Each build carries a stable id and a copy-link control. The clipboard behaviour lives in
+  `core.js` and both the contact panel and the project cards call it, so "copied" cannot come to
+  mean two different things in two files — and nothing is ever reported as copied unless it was.
+- In the arcade, picking an upload plays it in the frame that is already there. The rows stay real
+  links: a modified click, a middle click and a scripts-off visit all still go to YouTube. Playing
+  in place is an enhancement on top of a link that already worked, which is the only way it is
+  worth doing.
+
 ## States
 
 A failure is a job that stopped mid-step, and it reports what actually happened and what to do next
@@ -244,6 +332,20 @@ died when the stylesheet that defined them was deleted.
   left it partly visible.
 - `:focus-visible` is a 3px `--live` outline with offset. Selection, caret and scrollbars are themed
   from the palette on both pages.
+- A field that fails validation carries `aria-invalid` and is pointed at its own message with
+  `aria-describedby`. The red ring is only half of it: without the description, a screen reader
+  announces "Name, invalid" and offers no way to find out what is actually wrong.
+- The status pills that change text without anything moving — the form's endpoint state, the
+  YouTube panel's feed state, the toolkit's selection count — are polite live regions, so a change
+  is announced rather than only drawn.
+- The board's status cells hold nonsense while they are scrambling, so they are hidden from
+  assistive tech until they land. A screen reader should never be offered a row whose status reads
+  "qkxbe".
+- Escape closes the mobile sheet and returns focus to the button that opened it, and also clears a
+  toolkit selection. Nothing this site opens is a trap.
+- Every new control is a real button or a real link. The one exception by design is that filtered
+  builds are dimmed rather than removed, so what is on the page never disagrees with what is in the
+  accessibility tree.
 
 ## Responsive
 
@@ -296,8 +398,18 @@ any claim. Three lines were corrected when the links went in, because the repos 
 `Rufuf`'s "built 95% solo" (its own credits name three people with distinct roles), and DocMind's
 "built the entire frontend" (the repo lists three people on frontend).
 
+A fourth was corrected later: the F1 warehouse was labelled `Personal project`, when it was in fact
+the **graduation project for the DEPI track** and was built by six people. Both halves of that were
+wrong in the same direction — it understated the credential and overstated the authorship — which is
+the combination worth watching for. It now carries the programme, the year and the team size, and a
+`My part` block that says he worked across the pipeline rather than owning a stage of it. On a
+six-person build those are different claims, and only one of them is true.
+
 Team size and role are stated where they are true. A named role on a four-person build reads as more
 credible than an implied solo one, and it is the version that survives a reader clicking through.
+Note that the page now carries two graduation projects — the CS degree's (DocMind, AASTMT) and the
+DEPI track's (the F1 warehouse). Each names its programme, which is what keeps them apart; the rack
+label `Graduation project · Computer Science · AASTMT` is doing that work and should not be shortened.
 
 ## Rules a future edit must not break
 

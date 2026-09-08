@@ -8,7 +8,9 @@
    HERO — the name bolted to the wall, the manifest beside it,
    the status board immediately under. No card holds any of it.
    ============================================================= */
-.hero { padding: var(--s6) 0 0; }
+/* padding-TOP only: .hero is also a .wrap, and the shorthand would
+   zero the horizontal gutter .wrap just set. See the note on .sheet. */
+.hero { padding-top: var(--s6); }
 
 .hero__top {
   display: grid;
@@ -45,6 +47,19 @@
   text-transform: none;
   color: var(--on-field-2);
 }
+
+/* The wall clock — a lit readout stamped onto the origin plate.
+   Empty in the markup and hidden while empty, so with scripts off
+   the line closes up instead of showing a dead slot. */
+.hero__clk {
+  padding: 3px 8px;
+  background: var(--signal);
+  color: var(--ink);
+  font-variation-settings: 'wdth' 80, 'wght' 800;
+  letter-spacing: .08em;
+  font-variant-numeric: tabular-nums;
+}
+.hero__clk:empty { display: none; }
 
 h1 { margin-bottom: var(--s3); }
 h1 .two { display: block; color: var(--field); }
@@ -85,8 +100,17 @@ h1 .two { display: block; color: var(--field); }
   align-items: baseline;
   padding: 13px 16px;
   border-bottom: 1px solid var(--field-2);
+  transition: background .1s steps(2), box-shadow .1s steps(2);
 }
 .tblock__row:last-child { border-bottom: 0; }
+
+/* the read row marks itself with a keyline. An inset box-shadow,
+   not a border: a real border would reflow the whole plate on
+   hover, and the row is on a 1px internal rule already. */
+.tblock__row:hover {
+  background: var(--field-2);
+  box-shadow: inset var(--rule) 0 0 var(--signal);
+}
 
 .tblock__row dt {
   font-size: 10px;
@@ -140,6 +164,17 @@ h1 .two { display: block; color: var(--field); }
 }
 .brow:hover { background: var(--field-2); }
 
+/* the slat answers: the destination steps out of the rack and the
+   status cell lights, exactly as a real board's does when its row
+   is selected */
+.brow:hover .brow__d { transform: translateX(var(--s1)); }
+/* ...but never the live row. Exactly one thing on this page is
+   running, and hovering it must not repaint that away (rule 1). */
+.brow:hover .brow__s:not([data-s="live"]) {
+  background: var(--signal);
+  color: var(--ink);
+}
+
 .brow__t {
   font-size: 13px;
   font-variation-settings: 'wdth' 84, 'wght' 700;
@@ -159,6 +194,7 @@ h1 .two { display: block; color: var(--field); }
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: transform .1s steps(2);
 }
 
 .brow__n {
@@ -183,6 +219,7 @@ h1 .two { display: block; color: var(--field); }
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
   text-align: center;
+  transition: background .1s steps(2), color .1s steps(2);
 }
 
 .brow__s[data-s="done"] { color: var(--signal); }
@@ -255,6 +292,13 @@ h1 .two { display: block; color: var(--field); }
 }
 .facts .tblock__row dt { color: var(--faint); }
 .facts .tblock__row dd { color: var(--ink); }
+
+/* the same row response, on concrete instead of a blue field */
+.facts .tblock__row:hover {
+  background: var(--paper);
+  box-shadow: inset var(--rule) 0 0 var(--signal);
+}
+.facts .tblock__row:hover dt { color: var(--ink); }
 
 /* =============================================================
    BLOCK — the generic panel used by Now and Contact.
@@ -369,7 +413,10 @@ h1 .two { display: block; color: var(--field); }
   font-weight: 800;
   line-height: 1;
   text-transform: uppercase;
+  transition: color .1s steps(2);
 }
+/* history answers more quietly than the live block above it */
+.past__row:hover .past__who b { color: var(--field); }
 .past__who .co {
   padding: 3px 8px;
   background: var(--ink);
@@ -424,13 +471,30 @@ h1 .two { display: block; color: var(--field); }
    two-cell stage body. The smaller builds are a quiet ruled
    stack underneath, so the section breathes after the density.
    ============================================================= */
+/* The card is the largest thing on the page, so it answers when you
+   reach for it. The plate LIFTS off the wall — the exact inverse of
+   the press that every button already does, one step out instead of
+   one step in. Both offsets are derived from the two construction
+   tokens, so this follows --drop down to 5px at the narrow
+   breakpoint rather than pretending 9px is a real dimension.
+   Still one plate: no new container, no radius, no blur (rule 3). */
 .prj {
   background: var(--paper);
   border: var(--rule) solid var(--ink);
   box-shadow: var(--drop) var(--drop) 0 var(--ink);
   margin-bottom: var(--s5);
+  transition: transform .09s steps(2), box-shadow .09s steps(2);
+  /* each build has its own id, so a deep link has to land it clear
+     of the top edge rather than jammed against it */
+  scroll-margin-top: var(--s3);
 }
 .prj:last-child { margin-bottom: 0; }
+
+.prj:hover,
+.prj:focus-within {
+  transform: translate(calc(var(--drop-in) * -1), calc(var(--drop-in) * -1));
+  box-shadow: calc(var(--drop) + var(--drop-in)) calc(var(--drop) + var(--drop-in)) 0 var(--ink);
+}
 
 .prj__hd {
   display: grid;
@@ -564,6 +628,76 @@ a.also__row:hover > span { color: var(--ink); }
   color: var(--faint);
 }
 
+.kit__hint {
+  padding-left: var(--s3);
+  border-left: 2px solid var(--ink);
+}
+
+/* =============================================================
+   THE SELECTION READOUT
+   What part you picked, what it matched, and the way out. A
+   bolted bar in the section's own material — not a floating
+   chip, and not a nested plate (rule 3).
+   ============================================================= */
+.kit__sel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2) var(--s3);
+  margin-bottom: var(--s4);
+  padding: 12px 16px;
+  background: var(--ink);
+  color: var(--paper);
+  border: var(--rule) solid var(--ink);
+}
+/* it is display:flex, so it needs to be told what hidden means */
+.kit__sel[hidden] { display: none; }
+
+.kit__sel b {
+  font-family: var(--display);
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+.kit__sel > span {
+  font-size: 11px;
+  font-variation-settings: 'wdth' 82, 'wght' 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--on-field-2);
+}
+/* a bolted underline, not a drawn one: nothing else on the site
+   uses text-decoration, and a keyline is the material here */
+.kit__sel a {
+  font-size: 11px;
+  font-variation-settings: 'wdth' 82, 'wght' 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: var(--signal);
+  text-decoration: none;
+  border-bottom: 2px solid var(--signal);
+}
+.kit__sel a:hover { color: var(--paper); border-bottom-color: var(--paper); }
+
+.kit__clr {
+  margin-left: auto;
+  padding: 6px 11px;
+  background: var(--signal);
+  color: var(--ink);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--text);
+  font-size: 10px;
+  font-variation-settings: 'wdth' 80, 'wght' 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .1s steps(2);
+}
+.kit__clr:hover { background: var(--paper); }
+
 .kit { border-top: var(--rule) solid var(--ink); }
 .kit__row {
   display: grid;
@@ -572,7 +706,10 @@ a.also__row:hover > span { color: var(--ink); }
   align-items: start;
   padding: var(--s3) 4px;
   border-bottom: var(--rule) solid var(--ink);
+  transition: background .1s steps(2);
 }
+.kit__row:hover { background: var(--paper); }
+.kit__row:hover .kit__name { color: var(--ink); }
 .kit__name {
   font-size: 12px;
   font-variation-settings: 'wdth' 80, 'wght' 800;
@@ -600,9 +737,22 @@ a.also__row:hover > span { color: var(--ink); }
   border: var(--rule) solid var(--ink);
   box-shadow: var(--drop) var(--drop) 0 var(--ink);
   margin-bottom: var(--s4);
+  transition: transform .09s steps(2), box-shadow .09s steps(2);
 }
 .crs:last-child { margin-bottom: 0; }
 .crs.is-now { box-shadow: var(--drop) var(--drop) 0 var(--live); }
+
+/* the same lift as a project plate — one vocabulary, every plate */
+.crs:hover,
+.crs:focus-within {
+  transform: translate(calc(var(--drop-in) * -1), calc(var(--drop-in) * -1));
+  box-shadow: calc(var(--drop) + var(--drop-in)) calc(var(--drop) + var(--drop-in)) 0 var(--ink);
+}
+/* the running course keeps its orange offset while it lifts */
+.crs.is-now:hover,
+.crs.is-now:focus-within {
+  box-shadow: calc(var(--drop) + var(--drop-in)) calc(var(--drop) + var(--drop-in)) 0 var(--live);
+}
 
 .crs__hd {
   display: flex;
@@ -674,6 +824,30 @@ a.also__row:hover > span { color: var(--ink); }
   text-transform: uppercase;
 }
 
+/* Real course position, derived from the real agenda dates. The bar
+   is drawn from the same number that is printed beside it, so the
+   graphic cannot disagree with the text. */
+.syl__prog {
+  position: relative;
+  width: 100%;
+  padding: 7px 9px 11px;
+  background: var(--field-2);
+  color: var(--on-field);
+  font-size: 10px;
+  font-variation-settings: 'wdth' 80, 'wght' 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+.syl__prog::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: var(--rule);
+  width: calc(var(--done, 0) * 1%);
+  background: var(--signal);
+}
+
 .syl__list {
   max-height: 460px;
   overflow-y: auto;
@@ -688,8 +862,12 @@ a.also__row:hover > span { color: var(--ink); }
   gap: var(--s2);
   padding: 14px var(--s3);
   border-bottom: 1px solid var(--field-2);
+  transition: background .1s steps(2);
 }
 .syl__i:last-child { border-bottom: 0; }
+.syl__i:hover { background: var(--field-2); }
+/* the module actually running keeps its orange field */
+.syl__i.now:hover { background: var(--live); }
 
 .syl__n {
   font-family: var(--display);
@@ -1102,7 +1280,8 @@ a.also__row:hover > span { color: var(--ink); }
 }
 
 @media (max-width: 900px) {
-  #personal { scroll-margin-top: calc(var(--course) + var(--s3)); }
+  #personal,
+  .prj { scroll-margin-top: calc(var(--course) + var(--s3)); }
   /* the top bar already separates the page; the hero does not need
      a full section's worth of air under it as well */
   .hero { padding-top: var(--s4); }

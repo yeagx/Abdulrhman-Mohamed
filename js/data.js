@@ -109,8 +109,9 @@ const WORK = [
     id: 'f1',
     name: 'F1 Performance Warehouse',
     sub: 'Race data → star schema → champion predictor',
-    meta: 'Personal project · 2018–2021 seasons',
-    lead: 'Four seasons of Formula 1 race data, cleaned in two passes, modeled into a star schema, then ' +
+    meta: 'DEPI graduation project · 2025–2026 · six-person team',
+    lead: 'Four seasons of Formula 1 race data (2018–2021), cleaned in two passes, modeled into a star ' +
+          'schema, then ' +
           'used for both dashboards and a model that predicts the season champion.',
     blocks: [
       { h: 'Cleaning',
@@ -127,6 +128,11 @@ const WORK = [
         p: 'Metrics that were not in the source: point efficiency, pit-stop gap against the field, per-lap ' +
            'aggression, driver consistency, wet versus dry compound strength, and team tire-strategy patterns.',
         d: '0 → 7 engineered metrics' },
+      { h: 'My part',
+        p: 'A six-person team, and I worked across the pipeline rather than owning one stage of it: ' +
+           'the two cleaning passes, the star schema, the engineered metrics and the predictor. The ' +
+           'schema design is the part I took most out of — it is why I went looking for warehouse work.',
+        dl: 'Team:', d: 'six people · contributed across all four stages' },
       { h: 'The prediction',
         p: 'An XGBoost classifier over DriverSeason using average finish, aggression score, pit efficiency ' +
            'and constructor performance.',
@@ -238,7 +244,8 @@ const TRAINING = [
     org: 'Digital Egypt Pioneers Initiative (DEPI)',
     when: 'June 2025 — Jan 2026',
     body: 'Government-sponsored programme covering SQL, Power BI dashboarding and data cleaning. ' +
-          'Built four dashboards applying real reporting techniques. This is where I started in data.'
+          'Built four dashboards applying real reporting techniques, and finished it with the Formula 1 ' +
+          'warehouse as the graduation project. This is where I started in data.'
   },
   {
     id: 'iti',
