@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- If you move off abdulrhman-mohamed.vercel.app, change the host here,
+     in robots.txt, and in the <link rel="canonical"> + og:url + og:image
+     tags at the top of index.html and play.html. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://abdulrhman-mohamed.vercel.app/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://abdulrhman-mohamed.vercel.app/play.html</loc>
+    <priority>0.5</priority>
+  </url>
+</urlset>

@@ -30,45 +30,80 @@ const PROFILE = {
   },
 };
 
-/* ---------- current role ---------- */
+/* ---------- what I'm doing now ---------- */
 const NOW = {
-  title:   'Intern — AI-Driven Automation & Core Banking',
-  company: 'Finnovate (ICT Misr Group)',
-  when:    'July 2026 — present',
+  title:   'Big Data Track — full time',
+  company: 'Samsung Innovation Campus',
+  shortCompany: 'Samsung IC',
+  when:    'June 2026 — present',
   where:   'Cairo, Egypt',
-  body:    'Training and working on automation and core banking solutions for banking, insurance and ' +
-           'oil & gas clients, plus the solution-sales side of the business.',
-  tools:   ['RPA', 'BPM', 'Oracle FLEXCUBE', 'PostgreSQL / EDB'],
-  // why this belongs on a data engineering site — stated plainly, not inflated
-  relevance: 'It is not a data engineering title. What it does give me is time inside production ' +
-             'enterprise systems: real relational databases, real process automation, and the access ' +
-             'and governance rules that come with regulated financial data.'
+  body:    'A data engineering programme run across the whole pipeline, four hours a session, three ' +
+           'sessions a week. Ingestion and storage, distributed processing on Hadoop and Spark, ' +
+           'warehousing and dimensional modeling, then streaming, cloud and governance. The timetable ' +
+           'on the training section below is the real agenda, and it shows the module I am in today.',
+  tools:   ['Hadoop / HDFS', 'PySpark', 'Apache Hive', 'Sqoop', 'Apache NiFi', 'Kafka'],
+  note: {
+    h: 'What I have built in it so far',
+    p: 'The capstone: an end-to-end churn pipeline over four disconnected banking sources. I owned the ' +
+       'Hive warehouse, the monthly churn KPI and the orchestration. It is the first project in the ' +
+       'list below, and the first thing I have built that is data engineering rather than analysis.'
+  }
 };
 
-/* ---------- headline projects ---------- */
+/* ---------- the role before this one ---------- */
+const PAST = [
+  {
+    role:    'Intern — AI-Driven Automation & Core Banking',
+    company: 'Finnovate (ICT Misr Group)',
+    when:    'July — Sept 2026',
+    note:    'Automation and core banking solutions for banking, insurance and oil & gas clients, plus ' +
+             'the solution-sales side. Not a data engineering title — what it gave me was time inside ' +
+             'production enterprise systems: real relational databases, real process automation, and ' +
+             'the access and governance rules that come with regulated financial data.',
+    tools:   ['RPA', 'BPM', 'Oracle FLEXCUBE', 'PostgreSQL / EDB']
+  }
+];
+
+/* ---------- data engineering projects ---------- */
 const WORK = [
   {
-    id: 'docmind',
-    name: 'DocMind',
-    sub: 'AI academic assistant',
-    meta: 'Graduation project · 2025–2026 · graded A+',
-    lead: 'A university platform where students chat with their own course documents. I led the UI/UX ' +
-          'and built the entire frontend; the team built the retrieval backend around it.',
+    id: 'churn',
+    name: 'Customer Churn Pipeline',
+    sub: 'Four sources → zoned data lake → Hive star schema',
+    meta: 'Samsung IC capstone · 2026 · four-person team',
+    lead: 'An end-to-end big data pipeline for bank customer churn. Four disconnected sources land in a ' +
+          'zoned HDFS lake, get cleaned and enriched with PySpark, and are served as a partitioned ' +
+          'star-schema dimension through Hive. I owned the warehouse, the KPI layer and the orchestration.',
     blocks: [
-      { h: 'What it does',
-        p: 'Students upload course material and ask questions against it. Answers come back grounded in ' +
-           'their own documents rather than from a general model, with subject-specific tutors and a ' +
-           'multi-role admin dashboard behind it.' },
+      { h: 'The question',
+        p: 'Who is leaving, and what do they have in common? The answer needed four systems that did not ' +
+           'talk to each other: customer records in MySQL, support tickets and marketing offers as CSV, ' +
+           'and usage activity as JSON Lines. 10,000 customers, 2,037 of them churned.',
+        dl: 'Scope:', d: '4 disconnected sources → 1 queryable warehouse' },
+      { h: 'The lake',
+        p: 'HDFS split into four zones, each with one job. Raw is immutable and never edited, so it stays ' +
+           'the audit trail. Clean is typed, deduplicated and referentially valid. Warehouse is ' +
+           'feature-enriched and partitioned. Reject quarantines bad rows with the reason attached, ' +
+           'rather than dropping them silently.',
+        dl: 'Shape:', d: 'raw → clean → warehouse, plus a reject zone' },
       { h: 'My part',
-        p: 'Design and frontend: React 19, Tailwind CSS and Framer Motion, from the Figma work through ' +
-           'to the shipped interface, including the admin views for three different user roles.' },
-      { h: 'The data side',
-        p: 'The retrieval layer is a document pipeline: files are chunked, embedded, and stored as ' +
-           'vectors in PostgreSQL with pgvector, then queried per question. FastAPI serves it and the ' +
-           'Gemini API generates the answer from what comes back.' }
+        p: 'The Hive layer and the orchestration. An external Parquet dim_customer at one row per ' +
+           'customer, 21 columns, partitioned by geography, with SCD-2 columns carried on it. The monthly ' +
+           'churn KPI is a window function rather than a correlated subquery, which Hive will not take in ' +
+           'a SELECT list, and it computes the whole running series in one pass. Every stage overwrites, ' +
+           'so the run is idempotent: 6m 37s end to end.',
+        dl: 'Checks:', d: 'reconciles to 2,037 churned, exactly' },
+      { h: 'What it found',
+        p: 'Germany churns at roughly twice the rate of France and Spain — 32.4% against 16.2% and 16.7% ' +
+           '— on the same product at the same prices. A random forest over the warehouse scores 0.7997 ' +
+           'ROC AUC, and its riskiest decile churns at 67% against a 20.3% baseline.',
+        dl: 'Found:', d: '4.0× lift on the top decile' }
     ],
-    stack: ['React 19', 'Tailwind CSS', 'Framer Motion', 'FastAPI', 'PostgreSQL', 'pgvector', 'Gemini API', 'RAG'],
-    links: []
+    stack: ['Hadoop / HDFS', 'PySpark', 'Apache Hive', 'Sqoop', 'Apache NiFi', 'Parquet', 'MySQL',
+            'Star schema', 'SCD Type 2', 'scikit-learn', 'Streamlit'],
+    links: [
+      { label: 'Pipeline & warehouse', url: 'https://github.com/yeagx/sic-churn-data-pipeline' }
+    ]
   },
   {
     id: 'f1',
@@ -81,17 +116,21 @@ const WORK = [
       { h: 'Cleaning',
         p: 'The source was one wide table with contradictions in it. First pass fixed invalid pit times ' +
            'and normalised tire-compound naming. Second pass enforced the rule that stints = pit stops + 1, ' +
-           'which exposed broken final-stint values. Only once that held did I derive anything on top.' },
+           'which exposed broken final-stint values. Only once that held did I derive anything on top.',
+        d: 'contradictory source → stints = pit stops + 1 holds' },
       { h: 'The model',
         p: 'A star schema at three grains: Fact_PitStops per event, DriverRace per race, DriverSeason per ' +
            'season. Dimensions for driver, constructor, race and season. Three grains on purpose — the ' +
-           'dashboards read the race grain, the predictor reads the season grain, from one warehouse.' },
+           'dashboards read the race grain, the predictor reads the season grain, from one warehouse.',
+        d: '1 wide table → 3 fact grains + 4 dimensions' },
       { h: 'What I added',
         p: 'Metrics that were not in the source: point efficiency, pit-stop gap against the field, per-lap ' +
-           'aggression, driver consistency, wet and dry compound strength, and team tire-strategy patterns.' },
+           'aggression, driver consistency, wet versus dry compound strength, and team tire-strategy patterns.',
+        d: '0 → 7 engineered metrics' },
       { h: 'The prediction',
         p: 'An XGBoost classifier over DriverSeason using average finish, aggression score, pit efficiency ' +
-           'and constructor performance. It held 70–85% accuracy across historical seasons.' }
+           'and constructor performance.',
+        d: '70–85% accuracy across historical seasons' }
     ],
     stack: ['Python', 'Pandas', 'SQL', 'Star schema', 'XGBoost', 'Power BI'],
     links: [
@@ -101,14 +140,54 @@ const WORK = [
   }
 ];
 
+/* ---------- the graduation project ----------
+   Kept out of WORK on purpose: it is a full-stack AI product, not a
+   data engineering build, and it is grouped separately on the page so
+   the data work is read on its own terms.
+--------------------------------------------------------------- */
+const GRAD = [
+  {
+    id: 'docmind',
+    name: 'DocMind',
+    sub: 'AI academic assistant',
+    meta: 'Graduation project · 2025–2026 · graded A+ · seven-person team',
+    lead: 'A university platform where students chat with their own course documents. I led the UI/UX ' +
+          'and the frontend, in a team of seven across frontend, backend, mobile and the RAG layer.',
+    blocks: [
+      { h: 'What it does',
+        p: 'Students upload course material and ask questions against it. Answers come back grounded in ' +
+           'their own documents rather than from a general model, with subject-specific tutors and a ' +
+           'multi-role admin dashboard behind it.',
+        d: 'general model → answers grounded in the student’s own files' },
+      { h: 'My part',
+        p: 'Design and frontend: React 19, Vite, Tailwind CSS and Framer Motion, from the Figma work ' +
+           'through to the shipped interface, including the analytics and admin views for three ' +
+           'different user roles.',
+        d: 'Figma → shipped interface · 3 user roles' },
+      { h: 'The data side',
+        p: 'The retrieval layer is a document pipeline, and the chunking is structure-aware rather ' +
+           'than a fixed window: tables come out as intact Markdown, and section headings are ' +
+           'detected by font size and prepended to each chunk as breadcrumbs. Chunks are embedded ' +
+           'into PostgreSQL with pgvector, stamped with their material and page, and every answer ' +
+           'cites the slide it came from.',
+        dl: 'Shape:', d: 'PDF / PPTX → tables + headings → cited chunks' }
+    ],
+    stack: ['React 19', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Recharts', 'FastAPI',
+            'SQLAlchemy 2', 'PostgreSQL 16', 'pgvector', 'Gemini API', 'RAG'],
+    links: [
+      { label: 'Team repo', url: 'https://github.com/mohamedAY2004/DOCMIND' }
+    ]
+  },
+];
+
 /* ---------- smaller builds, one line each ---------- */
 const ALSO = [
-  { name: 'red.',      note: 'PHP/MySQL tech store with secure checkout and inventory control',
-    url: 'https://github.com/AYeagerr/red.-E-commerce-Tech-Store' },
-  { name: 'StepUp',    note: 'JSP e-commerce app with search and order management, four-person team',
-    url: '' },
-  { name: 'Rufuf POS', note: 'R Shiny point-of-sale with barcode scanning, built 95% solo',
-    url: '' }
+  { name: 'red.',      note: 'PHP/MySQL tech store — auth, cart, category browsing, search and price sorting',
+    url: 'https://github.com/yeagx/red.-E-commerce-Tech-Store' },
+  { name: 'StepUp',    note: 'Java/Jakarta EE servlets and JSP — cart, order history, admin inventory',
+    url: 'https://github.com/yeagx/StepUp-Java-Web-App' },
+  { name: 'Rufuf POS', note: 'R Shiny supermarket POS — barcode scanning, live stock, PDF receipts',
+    url: 'https://github.com/yeagx/Rufuf' }
 ];
 
 /* ---------- toolkit ----------
@@ -120,16 +199,16 @@ const TOOLKIT = [
 
   { group: 'Databases & warehousing',
     items: [ {n:'PostgreSQL'}, {n:'MySQL'}, {n:'pgvector'}, {n:'Star schema'},
-             {n:'Dimensional modeling'}, {n:'ETL / ELT'}, {n:'Apache Hive', learning:true},
+             {n:'Dimensional modeling'}, {n:'SCD Type 2'}, {n:'ETL / ELT'}, {n:'Sqoop'}, {n:'Parquet'}, {n:'Apache Hive'},
              {n:'NoSQL', learning:true} ] },
 
   { group: 'Big data',
-    items: [ {n:'Apache Spark', learning:true}, {n:'Hadoop', learning:true},
-             {n:'Apache Kafka', learning:true}, {n:'Apache NiFi', learning:true},
+    items: [ {n:'Apache Spark'}, {n:'Hadoop / HDFS'},
+             {n:'Apache Kafka', learning:true}, {n:'Apache NiFi'},
              {n:'Databricks', learning:true}, {n:'Snowflake', learning:true} ] },
 
   { group: 'Analysis & BI',
-    items: [ {n:'Power BI'}, {n:'Excel / Power Query'}, {n:'Pandas'}, {n:'NumPy'} ] },
+    items: [ {n:'Power BI'}, {n:'Streamlit'}, {n:'Excel / Power Query'}, {n:'Pandas'}, {n:'NumPy'} ] },
 
   { group: 'AI / ML',
     items: [ {n:'RAG pipelines'}, {n:'Gemini API'}, {n:'LangChain'},

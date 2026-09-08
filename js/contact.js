@@ -60,8 +60,8 @@
     if (b) b.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText(PROFILE.email);
-        h.textContent = 'copied'; h.style.color = 'var(--cy)';
-        setTimeout(() => { h.textContent = 'copy'; h.style.color = ''; }, 1800);
+        h.textContent = 'copied'; h.classList.add('is-ok');
+        setTimeout(() => { h.textContent = 'copy'; h.classList.remove('is-ok'); }, 1800);
       } catch (_) { window.location.href = 'mailto:' + PROFILE.email; }
     });
   }
@@ -70,14 +70,14 @@
   function state() {
     const pill = $('#formState'), note = $('#formNote');
     if (KEY_OK) {
-      if (pill) { pill.textContent = 'ready'; pill.style.color = 'var(--cy)'; }
+      if (pill) { pill.textContent = 'ready'; pill.classList.add('is-ok'); }
     } else {
-      if (pill) { pill.textContent = 'not set up'; pill.style.color = 'var(--err)'; }
+      if (pill) { pill.textContent = 'not set up'; pill.classList.add('is-bad'); }
       if (note) {
         note.textContent = 'form not connected yet — use email or WhatsApp on the left';
-        note.style.color = 'var(--err)';
+        note.classList.add('is-bad');
       }
-      if (bt) { bt.disabled = true; bt.style.opacity = '.45'; bt.style.cursor = 'not-allowed'; }
+      if (bt) bt.disabled = true;
       console.warn('[contact] No Web3Forms key. See README → "Turning the contact form on".');
     }
   }
@@ -181,7 +181,7 @@
     const at = new Date();
     const label = bt.innerHTML;
 
-    bt.disabled = true; bt.style.opacity = '.6'; bt.textContent = 'Sending…';
+    bt.disabled = true; bt.textContent = 'Sending…';
     receipt('run', 'sending', [
       ['reference', `<span class="tkt">${id}</span>`],
       ['status', 'waiting for the server…']
@@ -207,11 +207,11 @@
       clearTimeout(timer);
       json = await res.json().catch(() => ({}));
     } catch (err) {
-      bt.disabled = false; bt.style.opacity = '1'; bt.innerHTML = label;
+      bt.disabled = false; bt.innerHTML = label;
       draft.save();
       receipt('err', 'not delivered', [
         ['reference', `<span class="tkt">${id}</span>`],
-        ['status', `<span style="color:var(--err)">${err.name === 'AbortError' ? 'timed out' : 'network error'}</span>`],
+        ['status', `<span class="is-bad">${err.name === 'AbortError' ? 'timed out' : 'network error'}</span>`],
         ['your text', 'saved — still in the form below']
       ],
         `This did <b>not</b> send, and I would rather tell you than show a fake tick.
@@ -220,7 +220,7 @@
       return;
     }
 
-    bt.disabled = false; bt.style.opacity = '1'; bt.innerHTML = label;
+    bt.disabled = false; bt.innerHTML = label;
 
     if (res.ok && json && json.success) {
       draft.clear(); form.reset(); count();
@@ -241,7 +241,7 @@
       draft.save();
       receipt('err', 'rejected', [
         ['reference', `<span class="tkt">${id}</span>`],
-        ['server', `<span style="color:var(--err)">${res.status} ${esc((json && json.message) || 'unknown error')}</span>`],
+        ['server', `<span class="is-bad">${res.status} ${esc((json && json.message) || 'unknown error')}</span>`],
         ['your text', 'saved — still in the form below']
       ],
         `The server refused it, so nothing reached me.

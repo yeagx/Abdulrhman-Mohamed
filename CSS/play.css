@@ -1,0 +1,449 @@
+/* =============================================================
+   play.css — THE ARCADE (off duty)
+
+   Same grammar, opposite material. This file inverts the room's
+   tokens and styles the two panels; it never touches structure,
+   spacing, or the plate/press behaviour, all of which stay in
+   core.css. The shell — rail, sheet, footer, back-to-top — is
+   chrome and deliberately does NOT invert: the corridor is the
+   same, the room is not.
+   ============================================================= */
+
+:root {
+  /* the inversion. Values come from core.css's arcade block, so
+     the doorway on the work page and this room cannot drift. */
+  --ground:  var(--arc-ground);
+  --ink:     var(--arc-ink);      /* keylines and offsets go white */
+  --paper:   var(--arc-paper);
+  --field:   var(--arc-red);
+  --field-2: var(--arc-red-2);
+  --signal:  var(--arc-gold);
+  --faint:   var(--arc-faint);
+  --fault:   #FF6A5A;
+  --ok:      var(--arc-gold);
+
+  /* on a red or gold field, the type goes near-black: white on
+     broadcast red measures 3.7:1, black measures 5.2:1 */
+  --on-field:   var(--arc-ground);
+  --on-field-2: #4A1108;
+
+  /* the corridor nods to the room it opens onto */
+  --chrome-acc: var(--arc-red);
+
+  color-scheme: dark;
+}
+
+/* Core's light-room assumptions that need the inverse here:
+   a light hover ground needs dark type on it. */
+.bt:hover,
+.bt--go,
+.tg--now { color: var(--ground); }
+
+.bt[disabled] { background: var(--paper); }
+
+.fld input:focus,
+.fld select:focus,
+.fld textarea:focus { background: var(--paper); }
+
+::selection { background: var(--signal); color: var(--ground); }
+
+/* =============================================================
+   THE PAGE HEAD — the way back, then what is here.
+   ============================================================= */
+.off__hd { padding: var(--s6) 0 var(--s5); }
+
+/* The return leg. Same shared element as the doorway on the work
+   page, so the plate morph reverses symmetrically. The href MUST
+   carry #personal: without the fragment the work page renders at
+   scroll-zero, the doorway's geometry lands seven sections below
+   the viewport, and the plate visibly flies off the bottom. */
+.door--back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 13px var(--s3);
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--drop) var(--drop) 0 var(--signal);
+  font-size: 12px;
+  font-variation-settings: 'wdth' 86, 'wght' 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-bottom: var(--s4);
+  transition: transform .1s steps(2), box-shadow .1s steps(2), background .1s steps(2);
+}
+.door--back:hover { background: var(--signal); color: var(--ground); }
+.door--back:active {
+  transform: translate(var(--drop-in), var(--drop-in));
+  box-shadow: var(--drop-in) var(--drop-in) 0 var(--signal);
+}
+.door--back svg { flex: 0 0 auto; transform: scaleX(-1); }
+
+.off__hd h1 { margin-bottom: var(--s3); }
+.off__hd h1 em { font-style: normal; display: block; color: var(--field); }
+.off__hd p { color: var(--faint); font-size: 19px; max-width: 52ch; }
+
+/* =============================================================
+   THE TWO PANELS
+   ============================================================= */
+.off {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s5);
+  align-items: start;
+}
+
+.zone {
+  background: var(--paper);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--drop) var(--drop) 0 var(--ink);
+}
+
+/* each panel carries its own accent; the construction is identical */
+.zone--yt { --accent: var(--arc-red); }
+.zone--cr { --accent: var(--arc-gold); }
+
+.z__hd {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  padding: 13px 16px;
+  background: var(--accent);
+  color: var(--ground);
+  border-bottom: var(--rule) solid var(--ink);
+}
+.z__hd b {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.z__hd .r {
+  margin-left: auto;
+  font-size: 10px;
+  font-variation-settings: 'wdth' 80, 'wght' 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  background: var(--ground);
+  color: var(--accent);
+}
+
+.z__bd { padding: var(--s4); }
+
+.ytmark { display: flex; flex: 0 0 auto; }
+
+/* ---------- the channel ---------- */
+.yt__chan {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: var(--s3);
+  align-items: center;
+  padding-bottom: var(--s3);
+  border-bottom: var(--rule) solid var(--ink);
+}
+
+.yt__logo {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border: var(--rule) solid var(--ink);
+}
+
+.yt__chan h3 { font-size: 26px; }
+.yt__chan .h {
+  font-size: 12px;
+  font-variation-settings: 'wdth' 86, 'wght' 600;
+  color: var(--faint);
+}
+
+.yt__sub {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  padding: 11px var(--s3);
+  background: var(--accent);
+  color: var(--ground);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--drop-in) var(--drop-in) 0 var(--ink);
+  font-size: 12px;
+  font-variation-settings: 'wdth' 86, 'wght' 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .1s steps(2), transform .1s steps(2), box-shadow .1s steps(2);
+}
+.yt__sub:hover { background: var(--signal); }
+.yt__sub:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+
+.yt__blurb {
+  margin: var(--s3) 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+.yt__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--ground);
+  border: var(--rule) solid var(--ink);
+  overflow: hidden;
+}
+.yt__frame iframe { width: 100%; height: 100%; border: 0; }
+
+/* the placeholder reserves the frame's final height, so nothing
+   collapses behind the page transition */
+.ph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: var(--s2);
+  padding: var(--s3);
+  text-align: center;
+  font-size: 13px;
+  font-variation-settings: 'wdth' 86, 'wght' 600;
+  color: var(--faint);
+}
+.ph a { color: var(--accent); font-variation-settings: 'wdth' 86, 'wght' 800; }
+
+.yt__now {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  margin-top: var(--s3);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.yt__new {
+  padding: 3px 8px;
+  background: var(--accent);
+  color: var(--ground);
+  font-size: 10px;
+  font-variation-settings: 'wdth' 80, 'wght' 800;
+  letter-spacing: .12em;
+}
+
+.yt__list { margin-top: var(--s3); border-top: var(--rule) solid var(--ink); }
+
+.yt__it {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: var(--s3);
+  align-items: center;
+  padding: var(--s2) 0;
+  border-bottom: 1px solid var(--arc-line);
+  text-decoration: none;
+  /* same slide as the work page's small-builds rows, same reason */
+  transition: background .1s steps(2), transform .1s steps(2);
+}
+.yt__it:last-child { border-bottom: 0; }
+.yt__it:hover { background: var(--accent); color: var(--ground); transform: translateX(8px); }
+
+.yt__it img {
+  width: 112px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 2px solid var(--ink);
+}
+.yt__it > span { display: grid; gap: 3px; min-width: 0; }
+.yt__it b {
+  font-size: 14px;
+  font-variation-settings: 'wdth' 92, 'wght' 700;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.yt__it span span {
+  font-size: 11px;
+  font-variation-settings: 'wdth' 82, 'wght' 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+.yt__it:hover span span { color: var(--ground); }
+
+/* the loading state, built from the same plate material */
+.yt__skel {
+  height: 66px;
+  margin: var(--s2) 0;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--arc-line) 0 14px,
+    var(--paper) 14px 28px
+  );
+  border: 2px solid var(--arc-line);
+}
+
+/* =============================================================
+   CLASH ROYALE — the same plates, counted out in gold.
+   ============================================================= */
+.cr__hd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2);
+  padding-bottom: var(--s3);
+  border-bottom: var(--rule) solid var(--ink);
+}
+.cr__hd b {
+  font-family: var(--display);
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.cr__hd span {
+  font-size: 12px;
+  font-variation-settings: 'wdth' 84, 'wght' 700;
+  letter-spacing: .1em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.cr__met {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: var(--s3) 0;
+  border-top: 2px solid var(--ink);
+  border-left: 2px solid var(--ink);
+}
+.cr__met > div {
+  padding: 11px 12px;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+.cr__met dt {
+  font-size: 9px;
+  font-variation-settings: 'wdth' 80, 'wght' 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--faint);
+  margin-bottom: 4px;
+}
+.cr__met dd {
+  font-family: var(--display);
+  font-size: 27px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.cr__deckhd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s2);
+  padding: 10px 12px;
+  background: var(--accent);
+  color: var(--ground);
+  border: var(--rule) solid var(--ink);
+}
+.cr__deckhd b {
+  font-size: 14px;
+  font-variation-settings: 'wdth' 86, 'wght' 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.cr__deckhd span {
+  margin-left: auto;
+  font-size: 11px;
+  font-variation-settings: 'wdth' 84, 'wght' 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.cr__deck {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+
+.cr__c {
+  position: relative;
+  padding: 5px 5px 8px;
+  background: var(--ground);
+  border: 2px solid var(--ink);
+  text-align: center;
+  transition: transform .1s steps(2), background .1s steps(2);
+}
+.cr__c:hover { transform: translate(-2px, -2px); background: var(--arc-line); }
+
+.cr__c img { width: 100%; height: auto; }
+
+.cr__c b {
+  display: block;
+  margin-top: 5px;
+  font-size: 9px;
+  font-variation-settings: 'wdth' 80, 'wght' 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  line-height: 1.25;
+}
+
+/* the elixir cost, stamped like a part number */
+.cr__c .e {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  min-width: 20px;
+  padding: 2px 4px;
+  /* elixir purple, darkened from the game's own value so white 11px
+     type clears 4.5:1 on it rather than sitting at 4.2 */
+  background: #8E2FBF;
+  color: #FFFFFF;
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  font-size: 11px;
+  font-variation-settings: 'wdth' 82, 'wght' 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* the favourite: called out with a keyline, not a glow */
+.cr__c.fav {
+  border-color: var(--signal);
+  box-shadow: inset 0 0 0 2px var(--ground), inset 0 0 0 4px var(--signal);
+}
+
+.cr__note {
+  margin-top: var(--s3);
+  padding-top: var(--s3);
+  border-top: 1px solid var(--arc-line);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+/* =============================================================
+   RESPONSIVE
+   ============================================================= */
+@media (max-width: 1020px) {
+  .off { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 620px) {
+  .off__hd p { font-size: 17px; }
+  .yt__chan { grid-template-columns: 48px minmax(0, 1fr); }
+  .yt__logo { width: 48px; height: 48px; }
+  .yt__sub { grid-column: 1 / -1; justify-content: center; }
+  .yt__it { grid-template-columns: 84px minmax(0, 1fr); }
+  .yt__it img { width: 84px; }
+  .cr__met { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 440px) {
+  .cr__deck { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

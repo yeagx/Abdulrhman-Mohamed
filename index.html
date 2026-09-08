@@ -3,331 +3,304 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1">
   <title>Abdulrhman Mohamed Gomaa — Data Engineer</title>
   <meta name="description"
-    content="Data engineer in Cairo. Computer Science graduate, currently at Finnovate (ICT Misr Group) and on the Samsung Innovation Campus big data track.">
+    content="Data engineer in Cairo. Computer Science graduate on the Samsung Innovation Campus big data track, building end-to-end pipelines on Hadoop, Spark and Hive.">
   <meta name="author" content="Abdulrhman Mohamed Gomaa">
-  <meta name="theme-color" content="#0A1420">
+  <meta name="theme-color" content="#E6E3DA">
+  <link rel="canonical" href="https://abdulrhman-mohamed.vercel.app/">
 
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abdulrhman-mohamed.vercel.app/">
   <meta property="og:title" content="Abdulrhman Mohamed Gomaa — Data Engineer">
   <meta property="og:description" content="Computer Science graduate building a career in data engineering. Cairo, Egypt.">
-  <meta property="og:image" content="Images/hero.png">
+  <meta property="og:image" content="https://abdulrhman-mohamed.vercel.app/Images/hero.png">
   <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Cross-document view transitions. Inline and early on purpose: an
+       external sheet is discovered late behind the cross-origin font
+       request, and the transition has a hard ~4s budget to first render.
+       Nested in the media query so a visitor who asked for less motion
+       gets a plain instant navigation instead. -->
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      @view-transition { navigation: auto; types: to-work; }
+    }
+  </style>
 
   <link rel="icon" href="Images/icon.ico" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Luckiest+Guy&family=Roboto:wght@400;500;700&display=swap">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400..900&family=Archivo:wdth,wght@62..125,400..800&display=swap">
 
-  <link rel="stylesheet" href="CSS/base.css?v=7">
-  <link rel="stylesheet" href="CSS/sections.css?v=7">
+  <link rel="stylesheet" href="CSS/core.css">
+  <link rel="stylesheet" href="CSS/work.css">
+  <link rel="stylesheet" href="CSS/transition.css">
+
+  <!-- Prerender the other world on hover, so the transition never waits
+       on the network. Matched by selector rather than path, so it holds
+       on a GitHub Pages project subpath as well as at a domain root.
+       youtube.js waits for activation before racing its proxies. -->
+  <script type="speculationrules">
+    {"prerender":[{"where":{"selector_matches":"a.door"},"eagerness":"moderate"}]}
+  </script>
 </head>
 
 <body>
+<!--
+THESIS: This page is a plant floor for one engineer's work — panels bolted to
+concrete, one job running now. It refuses the card-grid dev portfolio and the
+yellow-on-white neo-brutalism that every generator ships.
+OWN-WORLD: Concrete ground (#E6E3DA) with machine-blue fields (#1B3AC9) owning
+whole regions, safety-yellow legends (#FFD400), hazard orange (#FF4A00) reserved
+for the live job and the primary action. Every surface is a plate: 3px ink
+keyline, 6px hard offset, zero radius, no blur. Plates press into the wall on
+:active. Big Shoulders Display bolted over Archivo prose.
+STORY: A recruiter reads the status board in one pass, sees what has arrived and
+what is running, and takes the last row.
+FIRST VIEWPORT: Stencil origin plate, the name at plate scale, one paragraph, two
+pressable controls; the blue manifest plate right; the status board immediately
+under, split-flapping into place.
+FORM: neo-brutalism, plant-floor rendition — pinned by the user's brief, so no
+concept roll was run.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.8.1-.7.1-.7 1.2 0 1.9 1.2 1.9 1.2 1.1 1.9 2.9 1.3 3.6 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.2-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.7 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.5.4.9 1.1.9 2.3v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></symbol>
       <symbol id="i-linkedin" viewBox="0 0 24 24"><path fill="currentColor" d="M20.4 20.4h-3.6v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1a3.8 3.8 0 0 1 3.4-1.9c3.6 0 4.3 2.4 4.3 5.5zM5.3 7.4a2.1 2.1 0 1 1 2.1-2.1 2.1 2.1 0 0 1-2.1 2.1M7.1 20.4H3.5V9h3.6zM22.2 0H1.8A1.8 1.8 0 0 0 0 1.8v20.4A1.8 1.8 0 0 0 1.8 24h20.4a1.8 1.8 0 0 0 1.8-1.8V1.8A1.8 1.8 0 0 0 22.2 0"/></symbol>
       <symbol id="i-youtube" viewBox="0 0 24 24"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8M9.6 15.6V8.4l6.3 3.6z"/></symbol>
-      <symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M3.5 6.5h17v11h-17z M3.5 7l8.5 5.5L20.5 7"/></symbol>
-      <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" d="M6 3.5h3.5L11.5 8 9 9.5a12 12 0 0 0 5 5L15.5 12l4.5 2v4a2 2 0 0 1-2.2 2A17 17 0 0 1 4 5.7 2 2 0 0 1 6 3.5"/></symbol>
+      <symbol id="i-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M3.5 6.5h17v11h-17z M3.5 7l8.5 5.5L20.5 7"/></symbol>
+      <symbol id="i-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" d="M6 3.5h3.5L11.5 8 9 9.5a12 12 0 0 0 5 5L15.5 12l4.5 2v4a2 2 0 0 1-2.2 2A17 17 0 0 1 4 5.7 2 2 0 0 1 6 3.5"/></symbol>
       <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M17.5 14.4c-.3-.2-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.7 0a8 8 0 0 1-2.4-1.5 9 9 0 0 1-1.6-2c-.2-.3 0-.5.1-.6l.5-.6.3-.5a.6.6 0 0 0 0-.6L9 6.7c-.2-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.8.4 3.4 3.4 0 0 0-1.1 2.6A6 6 0 0 0 7 12.4a13.5 13.5 0 0 0 5.2 4.6 17 17 0 0 0 1.7.6 4.2 4.2 0 0 0 1.9.1 3.1 3.1 0 0 0 2-1.4 2.5 2.5 0 0 0 .2-1.4c-.1-.2-.3-.3-.5-.5M12 0A12 12 0 0 0 1.7 18.1L0 24l6.1-1.6A12 12 0 1 0 12 0m0 21.8a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.6 1 1-3.5-.2-.4A9.8 9.8 0 1 1 12 21.8"/></symbol>
-      <symbol id="i-dl" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 18v3h16v-3"/></symbol>
-      <symbol id="i-ext" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
-      <symbol id="i-arr" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M4 12h15m0 0-5-5m5 5-5 5"/></symbol>
-      <symbol id="i-up" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.6" d="M12 19V5m0 0-6 6m6-6 6 6"/></symbol>
+      <symbol id="i-dl" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 18v3h16v-3"/></symbol>
+      <symbol id="i-ext" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
+      <symbol id="i-arr" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M4 12h15m0 0-5-5m5 5-5 5"/></symbol>
+      <symbol id="i-up" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 19V5m0 0-6 6m6-6 6 6"/></symbol>
     </defs>
   </svg>
 
-  <!-- ================= LEFT EDGE RAIL ================= -->
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- The index strip bolted down the plant wall. Static markup: the site
+       navigates with JavaScript off, and the current-page state is correct
+       at first paint, before any script runs. -->
   <nav class="rail" id="rail" aria-label="Sections">
     <div class="rail__top">
-      <span class="rail__mark">A</span>
-      <span class="rail__name" id="railName">A. Mohamed Gomaa</span>
-      <button class="menubt" id="menuBt" aria-label="Menu" aria-expanded="false">
+      <span class="rail__mark" aria-hidden="true">A</span>
+      <span class="rail__name" id="railName"></span>
+      <button class="menubt" id="menuBt" aria-label="Open section index" aria-expanded="false">
         <i></i><i></i><i></i>
       </button>
     </div>
-    <ul class="rail__nav" id="railNav"></ul>
+
+    <ul class="rail__nav" id="railNav">
+      <li><a class="rail__lnk on" href="#top" data-id="top" data-page="work" aria-current="true"><span class="rail__no"></span><span class="rail__txt">board</span></a></li>
+      <li><a class="rail__lnk" href="#about" data-id="about" data-page="work"><span class="rail__no"></span><span class="rail__txt">about</span></a></li>
+      <li><a class="rail__lnk" href="#now" data-id="now" data-page="work"><span class="rail__no"></span><span class="rail__txt">now</span></a></li>
+      <li><a class="rail__lnk" href="#work" data-id="work" data-page="work"><span class="rail__no"></span><span class="rail__txt">work</span></a></li>
+      <li><a class="rail__lnk" href="#toolkit" data-id="toolkit" data-page="work"><span class="rail__no"></span><span class="rail__txt">toolkit</span></a></li>
+      <li><a class="rail__lnk" href="#learning" data-id="learning" data-page="work"><span class="rail__no"></span><span class="rail__txt">training</span></a></li>
+      <li><a class="rail__lnk" href="play.html" data-id="personal" data-page="work"><span class="rail__no"></span><span class="rail__txt">away</span></a></li>
+      <li><a class="rail__lnk" href="#contact" data-id="contact" data-page="work"><span class="rail__no"></span><span class="rail__txt">contact</span></a></li>
+    </ul>
+
     <div class="rail__foot"><span id="railFoot"></span></div>
   </nav>
 
-  <div class="msheet" id="mSheet"></div>
+  <div class="msheet" id="mSheet">
+    <a href="#top" data-id="top" data-page="work" class="on"><span></span>board</a>
+    <a href="#about" data-id="about" data-page="work"><span></span>about</a>
+    <a href="#now" data-id="now" data-page="work"><span></span>now</a>
+    <a href="#work" data-id="work" data-page="work"><span></span>work</a>
+    <a href="#toolkit" data-id="toolkit" data-page="work"><span></span>toolkit</a>
+    <a href="#learning" data-id="learning" data-page="work"><span></span>training</a>
+    <a href="play.html" data-id="personal" data-page="work"><span></span>away</a>
+    <a href="#contact" data-id="contact" data-page="work"><span></span>contact</a>
+    <a href="CV.pdf" download><span></span>résumé</a>
+  </div>
 
   <div class="page">
-    <main>
+    <main id="main">
 
       <!-- ================= HERO ================= -->
       <section class="hero wrap" id="top">
         <div class="hero__top">
           <div>
-            <div class="hero__eyebrow">
-              <span class="tick"></span>
-              <span class="lbl" id="heroKicker">—</span>
-            </div>
+            <p class="hero__origin">
+              <span>Cairo, Egypt</span>
+              <b id="heroNow">—</b>
+              <span class="ar" lang="ar" dir="rtl">القاهرة</span>
+            </p>
 
-            <h1>Abdulrhman Mohamed<span class="thin">Gomaa</span></h1>
-
-            <p class="hero__role mono">Data Engineer <em>— Cairo, Egypt</em></p>
+            <h1>Abdulrhman<span class="two">Mohamed Gomaa</span></h1>
 
             <p class="hero__lede">
-              Computer Science graduate. I got into data through analytics, and I am building toward
-              <b>data engineering</b> — the work of getting data somewhere trustworthy before anyone
-              tries to make a decision with it.
+              Computer Science graduate, working toward <b>data engineering</b>: getting data somewhere
+              trustworthy before anyone tries to make a decision on it.
             </p>
 
             <div class="hero__acts">
-              <a href="#work" class="bt bt--solid">See my work <svg width="13" height="13"><use href="#i-arr"/></svg></a>
+              <a href="#contact" class="bt bt--go">Get in touch <svg width="14" height="14" aria-hidden="true"><use href="#i-arr"/></svg></a>
               <a href="CV.pdf" download="Abdulrhman Mohamed Gomaa — CV.pdf" class="bt">
-                <svg width="13" height="13"><use href="#i-dl"/></svg> Résumé
+                <svg width="14" height="14" aria-hidden="true"><use href="#i-dl"/></svg> Résumé
               </a>
-              <a href="#contact" class="bt">Contact</a>
             </div>
           </div>
 
-          <!-- drawing title block -->
           <dl class="tblock" id="titleBlock"></dl>
         </div>
 
-        <!-- schematic -->
-        <div class="schem">
-          <div class="schem__cap">
-            <h2>Sheet index</h2>
-            <p>What is on this page, in order.</p>
-          </div>
-          <div class="schem__box">
-            <div class="schem__grid" id="schem">
-              <svg class="schem__wires" id="wires" aria-hidden="true"></svg>
-
-              <a class="nd" href="#about">
-                <span class="nd__pin nd__pin--r"></span>
-                <span class="nd__hd">input <b>01</b></span>
-                <span class="nd__bd">
-                  <h3>Background</h3>
-                  <p>Computer Science graduate in Cairo. Started in data through analytics.</p>
-                </span>
-              </a>
-
-              <a class="nd" href="#toolkit">
-                <span class="nd__pin nd__pin--l"></span><span class="nd__pin nd__pin--r"></span>
-                <span class="nd__hd">process <b>02</b></span>
-                <span class="nd__bd">
-                  <h3>Skills &amp; training</h3>
-                  <p>SQL, Python and warehousing. Currently learning Spark, Hive and Kafka.</p>
-                </span>
-              </a>
-
-              <a class="nd" href="#work">
-                <span class="nd__pin nd__pin--l"></span><span class="nd__pin nd__pin--r"></span>
-                <span class="nd__hd">output <b>03</b></span>
-                <span class="nd__bd">
-                  <h3>Projects</h3>
-                  <p>An AI study platform graded A+, and an F1 warehouse with a champion predictor.</p>
-                </span>
-              </a>
-
-              <a class="nd" href="#contact">
-                <span class="nd__pin nd__pin--l"></span>
-                <span class="nd__hd">endpoint <b>04</b></span>
-                <span class="nd__bd">
-                  <h3>Get in touch</h3>
-                  <p>Open to data engineering and analytics roles. The form here actually works.</p>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
+        <div class="board" id="board"></div>
       </section>
 
-      <!-- ================= 01 ABOUT ================= -->
+      <!-- ================= ABOUT ================= -->
       <section class="sheet wrap" id="about">
-        <header class="shd rv">
-          <div class="shd__rule">
-            <span class="tick"></span><span class="shd__ann">source</span>
-          </div>
+        <div class="rule"></div>
+        <header class="shd">
           <h2>About me</h2>
           <p>The short version, for anyone who does not want to read a CV.</p>
         </header>
 
         <div class="about">
-          <div class="rv">
+          <div>
             <p>I finished my Computer Science degree at the <strong>Arab Academy for Science, Technology &amp;
               Maritime Transport</strong> in June 2026, with a 3.66 GPA and an A+ on my graduation project.</p>
 
             <p>I found data in the middle of that degree. The <strong>DEPI Data Analytics track</strong> is where it
-              started — SQL, Power BI, and a lot of cleaning other people's spreadsheets. What I noticed was that the
-              interesting problems were never in the chart. They were further back: the data was wrong, or arrived in
+              started: SQL, Power BI, and a lot of cleaning other people's spreadsheets. What I noticed was that the
+              interesting problems were never in the chart. They were further back. The data was wrong, or arrived in
               a shape nobody could query, or could not be trusted enough to act on.</p>
 
             <p>So I moved upstream. I built a warehouse for four seasons of Formula 1 data to learn schema design
               properly, and I am now on the <strong>Samsung Innovation Campus big data track</strong> filling in the
               parts I had been working around: distributed processing, ingestion tooling, streaming and cloud.</p>
 
-            <p>Alongside that I am interning at <strong>Finnovate</strong>, part of ICT Misr Group, on banking
-              automation. I still write frontend when a project needs it — that is how I ended up leading the interface
-              for my graduation project — but data is the direction I am going.</p>
+            <p>Alongside that I spent the summer interning at <strong>Finnovate</strong>, part of ICT Misr Group,
+              on banking automation — that finished in September 2026, and the Samsung track is what I am on full time
+              now. I still write frontend when a project needs it, which is how I ended up leading the interface for my
+              graduation project, but data is the direction I am going.</p>
           </div>
 
-          <div class="rv">
-            <figure class="port" style="margin:0">
-              <img src="Images/my photo.jpeg" alt="Abdulrhman Mohamed Gomaa" loading="lazy" decoding="async">
-              <figcaption class="port__cap" id="portCap"></figcaption>
-            </figure>
-          </div>
+          <figure class="port">
+            <img src="Images/my photo.jpeg" alt="Abdulrhman Mohamed Gomaa" loading="lazy" decoding="async">
+            <figcaption class="port__cap" id="portCap"></figcaption>
+          </figure>
         </div>
 
-        <dl class="facts rv" id="facts"></dl>
+        <dl class="facts" id="facts"></dl>
       </section>
 
-      <!-- ================= 02 NOW ================= -->
+      <!-- ================= NOW ================= -->
       <section class="sheet wrap" id="now">
-        <header class="shd rv">
-          <div class="shd__rule">
-            <span class="tick"></span><span class="shd__ann">current</span>
-          </div>
+        <div class="rule"></div>
+        <header class="shd">
           <h2>What I'm doing now</h2>
           <p>Where I actually am this month, at work and in training.</p>
         </header>
-
-        <div class="blk rv" id="nowBlock"></div>
+        <div class="blk" id="nowBlock"></div>
+        <div class="past" id="past"></div>
       </section>
 
-      <!-- ================= 03 WORK ================= -->
+      <!-- ================= WORK ================= -->
       <section class="sheet wrap" id="work">
-        <header class="shd rv">
-          <div class="shd__rule">
-            <span class="tick"></span><span class="shd__ann">output</span>
-          </div>
+        <div class="rule"></div>
+        <header class="shd">
           <h2>What I've built</h2>
-          <p>Two projects I can walk through in detail, and three smaller ones underneath.</p>
+          <p>The data engineering work first, on its own. Then the graduation project, which is a
+            full-stack AI product rather than a pipeline. Then three smaller builds.</p>
         </header>
 
         <div id="projects"></div>
-
-        <div class="dim rv" style="margin:34px 0 16px"><span>also built</span></div>
-        <div class="also rv" id="also"></div>
+        <div class="grad" id="grad"></div>
+        <div class="also" id="also"></div>
       </section>
 
-      <!-- ================= 04 TOOLKIT ================= -->
+      <!-- ================= TOOLKIT ================= -->
       <section class="sheet wrap" id="toolkit">
-        <header class="shd rv">
-          <div class="shd__rule">
-            <span class="tick"></span><span class="shd__ann">toolkit</span>
-          </div>
+        <div class="rule"></div>
+        <header class="shd">
           <h2>What I work with</h2>
           <p>Grouped by what each thing is for. Anything I am still learning is marked as such.</p>
         </header>
 
-        <div class="kit__key rv">
-          <i><span class="tg" style="padding:2px 8px">tool</span> I have used this</i>
-          <i><span class="tg tg--now" style="padding:2px 8px">tool</span> currently learning it</i>
+        <div class="kit__key">
+          <i><span class="tg">tool</span> I have used this</i>
+          <i><span class="tg tg--now">tool</span> currently learning it</i>
         </div>
 
-        <div class="kit rv" id="kit"></div>
+        <div class="kit" id="kit"></div>
       </section>
 
-      <!-- ================= 05 LEARNING ================= -->
+      <!-- ================= TRAINING ================= -->
       <section class="sheet wrap" id="learning">
-        <header class="shd rv">
-          <div class="shd__rule">
-            <span class="tick"></span><span class="shd__ann">training</span>
-          </div>
+        <div class="rule"></div>
+        <header class="shd">
           <h2>Training &amp; courses</h2>
-          <p>Four programmes, one of them still running. The syllabus on the right shows where I am in it.</p>
+          <p>Four programmes, one of them still running. The timetable on the right shows the course I am on.</p>
         </header>
 
         <div class="learn">
-          <div class="rv" id="courses"></div>
-          <div class="rv learn__col">
+          <div id="courses"></div>
+          <div class="learn__col">
             <div class="syl" id="syllabus"></div>
           </div>
         </div>
       </section>
 
-      <!-- ================= 06 OFF THE CLOCK ================= -->
+      <!-- ================= THE DOORWAY =================
+           The other world showing through a hole in the wall, and
+           the shared element the page transition expands into the
+           room. A real <a href>, so it works without JavaScript
+           and in browsers with no view-transition support. -->
       <section class="sheet wrap" id="personal">
-        <header class="shd rv">
-          <div class="shd__rule">
-            <span class="tick"></span><span class="shd__ann">side</span>
-          </div>
-          <h2>Away from work</h2>
-          <p>A YouTube channel and a game I have played for years.</p>
-        </header>
+        <div class="rule"></div>
 
-        <div class="off">
-
-          <!-- YouTube: its own black-and-red world -->
-          <div class="zone zone--yt rv">
-            <div class="z__hd">
-              <span class="ytmark"><svg width="24" height="24"><use href="#i-youtube"/></svg></span>
-              <b>YouTube</b>
-              <span class="r" id="ytStatus">loading</span>
-            </div>
-            <div class="z__bd">
-              <div class="yt__chan">
-                <img class="yt__logo" src="Images/yeagx_logo.jpg" alt="YeagX channel avatar" id="ytLogo" loading="lazy">
-                <div>
-                  <h3>YeagX</h3>
-                  <div class="h">@YeagX</div>
-                </div>
-                <a class="yt__sub" href="https://www.youtube.com/@YeagX" target="_blank" rel="noopener">
-                  <svg width="16" height="16"><use href="#i-youtube"/></svg> Subscribe
-                </a>
-              </div>
-
-              <p class="yt__blurb" id="ytBlurb"></p>
-
-              <div class="yt__frame" id="ytFrame"><div class="ph">loading the latest upload…</div></div>
-              <div class="yt__now" id="ytNow"></div>
-
-              <div class="yt__list" id="ytList">
-                <div class="yt__skel"></div><div class="yt__skel"></div><div class="yt__skel"></div>
+        <a class="door" href="play.html">
+          <div class="door__in">
+            <div>
+              <h2>Away<em>from work</em></h2>
+              <p>A YouTube channel and a game I have played for years.</p>
+              <div class="door__what">
+                <span>YouTube · YeagX</span>
+                <span>Clash Royale</span>
               </div>
             </div>
+            <span class="door__go">
+              Go through <svg width="15" height="15" aria-hidden="true"><use href="#i-arr"/></svg>
+            </span>
           </div>
-
-          <!-- Clash Royale: arena blue and gold -->
-          <div class="zone zone--cr rv">
-            <div class="z__hd">
-              <b>Clash Royale</b>
-              <span class="r" id="crUpdated"></span>
-            </div>
-            <div class="z__bd" id="clash"></div>
-          </div>
-
-        </div>
+        </a>
       </section>
 
-      <!-- ================= 07 CONTACT ================= -->
+      <!-- ================= CONTACT ================= -->
       <section class="sheet wrap" id="contact">
-        <header class="shd rv">
-          <div class="shd__rule">
-            <span class="tick"></span><span class="shd__ann">endpoint</span>
-          </div>
+        <div class="rule"></div>
+        <header class="shd">
           <h2>Get in touch</h2>
-          <p>Open to data engineering and analytics roles, in Cairo or remote. Every message here gets a
-            reference number and a real delivery result — nothing disappears quietly.</p>
+          <p>Open to data engineering and analytics roles, in Cairo or remote. Every message gets a reference
+            number and a real delivery result. Nothing disappears quietly.</p>
         </header>
 
         <div class="sink">
-          <div class="rv sink__col">
+          <div class="sink__col">
             <div class="blk">
-              <div class="blk__hd"><span class="tick"></span> direct</div>
+              <div class="blk__hd">Direct</div>
               <div class="chans" id="chans"></div>
             </div>
           </div>
 
-          <div class="blk rv">
+          <div class="blk">
             <div class="blk__hd">
-              <span class="tick"></span> message form
+              Message form
               <span class="r" id="formState">checking</span>
             </div>
             <div class="blk__bd">
               <form class="frm" id="cForm" novalidate>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px" class="two">
+                <div class="frm__pair">
                   <div class="fld">
                     <label for="cname">Name <span class="rq">*</span></label>
                     <input type="text" id="cname" name="name" autocomplete="name" placeholder="Your name" required>
@@ -353,7 +326,7 @@
 
                 <div class="fld">
                   <label for="cmsg">Message <span class="rq">*</span>
-                    <span style="margin-left:auto;color:var(--tx-3);letter-spacing:0" id="msgCount">0</span>
+                    <span style="margin-left:auto" id="msgCount">0</span>
                   </label>
                   <textarea id="cmsg" name="message" placeholder="A couple of lines about what you need." required></textarea>
                   <div class="fld__e" id="e-cmsg"></div>
@@ -365,10 +338,10 @@
                 </div>
 
                 <div class="frm__ft">
-                  <button type="submit" class="bt bt--solid" id="sendBt">
-                    Send <svg width="13" height="13"><use href="#i-arr"/></svg>
+                  <button type="submit" class="bt bt--go" id="sendBt">
+                    Send <svg width="14" height="14" aria-hidden="true"><use href="#i-arr"/></svg>
                   </button>
-                  <span class="frm__nt" id="formNote">sent over https · no tracking</span>
+                  <span class="frm__nt" id="formNote">over https · no tracking</span>
                 </div>
               </form>
 
@@ -396,13 +369,12 @@
     </footer>
   </div>
 
-  <button class="up" id="up" aria-label="Back to top"><svg width="14" height="14"><use href="#i-up"/></svg></button>
+  <button class="up" id="up" aria-label="Back to top"><svg width="15" height="15" aria-hidden="true"><use href="#i-up"/></svg></button>
 
-  <script src="js/data.js?v=7"></script>
-  <script src="js/render.js?v=7"></script>
-  <script src="js/dag.js?v=7"></script>
-  <script src="js/youtube.js?v=7"></script>
-  <script src="js/contact.js?v=7"></script>
+  <script src="js/data.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/work.js"></script>
+  <script src="js/contact.js"></script>
 </body>
 
 </html>

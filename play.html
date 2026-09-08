@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1">
+  <title>Away from work — Abdulrhman Mohamed Gomaa</title>
+  <meta name="description"
+    content="Off duty: the YeagX YouTube channel and the Clash Royale deck I have played for years. The other half of Abdulrhman Mohamed Gomaa's portfolio.">
+  <meta name="author" content="Abdulrhman Mohamed Gomaa">
+  <meta name="theme-color" content="#0E0E0E">
+  <link rel="canonical" href="https://abdulrhman-mohamed.vercel.app/play.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://abdulrhman-mohamed.vercel.app/play.html">
+  <meta property="og:title" content="Away from work — Abdulrhman Mohamed Gomaa">
+  <meta property="og:description" content="A YouTube channel and a game I have played for years.">
+  <meta property="og:image" content="https://abdulrhman-mohamed.vercel.app/Images/ytbg.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Same opt-in as the work page. The animation itself is NOT here:
+       all view-transition pseudo styling is taken from the document you
+       navigate TO, so with exactly two pages the destination already
+       determines the direction. transition.css branches on the room. -->
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      @view-transition { navigation: auto; types: to-play; }
+    }
+  </style>
+
+  <link rel="icon" href="Images/icon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400..900&family=Archivo:wdth,wght@62..125,400..800&display=swap">
+
+  <link rel="stylesheet" href="CSS/core.css">
+  <link rel="stylesheet" href="CSS/play.css">
+  <link rel="stylesheet" href="CSS/transition.css">
+
+  <!-- The return leg, prerendered on hover. Same selector rule. -->
+  <script type="speculationrules">
+    {"prerender":[{"where":{"selector_matches":"a.door"},"eagerness":"moderate"}]}
+  </script>
+</head>
+
+<body class="is-play">
+<!--
+THESIS: The other room. Same construction as the work page — same keyline
+weight, same hard offset, same plate geometry — with the material inverted,
+so the visitor is never disoriented and never in any doubt which world they
+are standing in.
+OWN-WORLD: Ink-black ground (#0E0E0E) with broadcast red (#FF2D16) and arena
+gold (#FFC12B) owning whole fields; keylines and offsets go white. The shell —
+rail, footer, back-to-top — does not invert: the corridor is the same, the
+room is not.
+STORY: A visitor who chose to come here sees what he actually does off duty,
+in full voice, then walks back through the same doorway.
+FIRST VIEWPORT: The way back, the title at plate scale, then the two panels.
+FORM: neo-brutalism, arcade rendition — the inverse of the plant.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+-->
+
+  <!-- Only the symbols this page uses: <use href="#…"> cannot reach
+       into another document, so the sprite is duplicated, trimmed. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-youtube" viewBox="0 0 24 24"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8M9.6 15.6V8.4l6.3 3.6z"/></symbol>
+      <symbol id="i-ext" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></symbol>
+      <symbol id="i-arr" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M4 12h15m0 0-5-5m5 5-5 5"/></symbol>
+      <symbol id="i-up" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.7" d="M12 19V5m0 0-6 6m6-6 6 6"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- The same eight items as the work page, so the rail is one shared
+       element across the transition. The seven work sections point back
+       into index.html; "away" is the current document and says so in the
+       markup, correct at first paint before any script runs. -->
+  <nav class="rail" id="rail" aria-label="Sections">
+    <div class="rail__top">
+      <span class="rail__mark" aria-hidden="true">A</span>
+      <span class="rail__name" id="railName"></span>
+      <button class="menubt" id="menuBt" aria-label="Open section index" aria-expanded="false">
+        <i></i><i></i><i></i>
+      </button>
+    </div>
+
+    <ul class="rail__nav" id="railNav">
+      <li><a class="rail__lnk" href="index.html#top" data-id="top" data-page="work"><span class="rail__no"></span><span class="rail__txt">board</span></a></li>
+      <li><a class="rail__lnk" href="index.html#about" data-id="about" data-page="work"><span class="rail__no"></span><span class="rail__txt">about</span></a></li>
+      <li><a class="rail__lnk" href="index.html#now" data-id="now" data-page="work"><span class="rail__no"></span><span class="rail__txt">now</span></a></li>
+      <li><a class="rail__lnk" href="index.html#work" data-id="work" data-page="work"><span class="rail__no"></span><span class="rail__txt">work</span></a></li>
+      <li><a class="rail__lnk" href="index.html#toolkit" data-id="toolkit" data-page="work"><span class="rail__no"></span><span class="rail__txt">toolkit</span></a></li>
+      <li><a class="rail__lnk" href="index.html#learning" data-id="learning" data-page="work"><span class="rail__no"></span><span class="rail__txt">training</span></a></li>
+      <li><a class="rail__lnk" href="play.html" data-page="play" aria-current="page"><span class="rail__no"></span><span class="rail__txt">away</span></a></li>
+      <li><a class="rail__lnk" href="index.html#contact" data-id="contact" data-page="work"><span class="rail__no"></span><span class="rail__txt">contact</span></a></li>
+    </ul>
+
+    <div class="rail__foot"><span id="railFoot"></span></div>
+  </nav>
+
+  <div class="msheet" id="mSheet">
+    <a href="index.html#top" data-id="top" data-page="work"><span></span>board</a>
+    <a href="index.html#about" data-id="about" data-page="work"><span></span>about</a>
+    <a href="index.html#now" data-id="now" data-page="work"><span></span>now</a>
+    <a href="index.html#work" data-id="work" data-page="work"><span></span>work</a>
+    <a href="index.html#toolkit" data-id="toolkit" data-page="work"><span></span>toolkit</a>
+    <a href="index.html#learning" data-id="learning" data-page="work"><span></span>training</a>
+    <a href="play.html" data-page="play" aria-current="page"><span></span>away</a>
+    <a href="index.html#contact" data-id="contact" data-page="work"><span></span>contact</a>
+    <a href="CV.pdf" download><span></span>résumé</a>
+  </div>
+
+  <div class="page">
+    <main id="main">
+
+      <header class="off__hd wrap">
+        <!-- The fragment is load-bearing: it puts the work page's doorway
+             on screen so the plate morph reverses, and lands the visitor
+             exactly where they left. -->
+        <a class="door door--back" href="index.html#personal">
+          <svg width="14" height="14" aria-hidden="true"><use href="#i-arr"/></svg> Back to the work
+        </a>
+
+        <h1>Away<em>from work</em></h1>
+        <p>A YouTube channel and a game I have played for years.</p>
+      </header>
+
+      <section class="off wrap" id="play">
+
+        <div class="zone zone--yt" id="yt">
+          <div class="z__hd">
+            <span class="ytmark"><svg width="24" height="24" aria-hidden="true"><use href="#i-youtube"/></svg></span>
+            <b>YouTube</b>
+            <span class="r" id="ytStatus">loading</span>
+          </div>
+          <div class="z__bd">
+            <div class="yt__chan">
+              <img class="yt__logo" src="Images/yeagx_logo.jpg" alt="YeagX channel avatar" id="ytLogo" loading="lazy">
+              <div>
+                <h3>YeagX</h3>
+                <div class="h">@YeagX</div>
+              </div>
+              <a class="yt__sub" href="https://www.youtube.com/@YeagX" target="_blank" rel="noopener">
+                <svg width="16" height="16" aria-hidden="true"><use href="#i-youtube"/></svg> Subscribe
+              </a>
+            </div>
+            <p class="yt__blurb" id="ytBlurb"></p>
+            <div class="yt__frame" id="ytFrame"><div class="ph">loading the latest upload…</div></div>
+            <div class="yt__now" id="ytNow"></div>
+            <div class="yt__list" id="ytList">
+              <div class="yt__skel"></div><div class="yt__skel"></div><div class="yt__skel"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="zone zone--cr" id="cr">
+          <div class="z__hd">
+            <b>Clash Royale</b>
+            <span class="r" id="crUpdated"></span>
+          </div>
+          <div class="z__bd" id="clash"></div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <footer class="ft">
+      <div class="wrap ft__in">
+        <span>© <span id="yr"></span> Abdulrhman Mohamed Gomaa · built by hand, no framework</span>
+        <div class="ft__lnks">
+          <a href="index.html">The work</a>
+          <a href="https://github.com/yeagx" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/abdulrhman-mohamed-da" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://www.youtube.com/@YeagX" target="_blank" rel="noopener">YouTube</a>
+          <a href="CV.pdf" download>Résumé</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <button class="up" id="up" aria-label="Back to top"><svg width="15" height="15" aria-hidden="true"><use href="#i-up"/></svg></button>
+
+  <script src="js/data.js"></script>
+  <script src="js/core.js"></script>
+  <script src="js/play.js"></script>
+  <script src="js/youtube.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "roboto",
+        "createdAt": "2026-08-29T12:39:45.237Z",
+        "reason": "Claude decided the face: user asked the YouTube panel to be its own world ('yt section unique and odd to the whole site') and delegated its face ('for yt use whatever feels good'). Roboto is YouTube's own UI face; scoped strictly to .zone--yt, never the site voice, which is Archivo."
+      }
+    ]
+  }
+}

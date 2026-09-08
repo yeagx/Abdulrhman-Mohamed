@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://abdulrhman-mohamed.vercel.app/sitemap.xml

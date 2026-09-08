@@ -1,0 +1,129 @@
+/* =============================================================
+   transition.css — moving between the two worlds.
+
+   Loaded by both documents. The navigation opt-in itself is NOT
+   here: it is inline in each page's <head>, wrapped in
+   `prefers-reduced-motion: no-preference`, because an external
+   sheet is discovered behind the cross-origin font request and
+   the transition has a hard ~4s budget to first render.
+
+   All view-transition pseudo styling is taken from the document
+   you navigate TO. Each page declares its own type in that inline
+   block — index.html `to-work`, play.html `to-play` — so the
+   destination alone decides the direction. No JavaScript, no
+   pageswap, no pagereveal.
+
+   ONE MATERIAL: clip-path. Going deeper, the doorway opens like an
+   aperture and the room fills the frame. Coming back, the plant
+   floor rises into place. Nothing stacked on top of that.
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   THE SHELL HOLDS STILL
+   The rail and the back-to-top are `position: fixed`. Without
+   their own names they are captured inside the root snapshot and
+   dragged by its clip-path. Named, they are lifted out — and
+   because the shell is identical in both worlds, the correct
+   animation for them is none at all. The corridor does not move.
+   ------------------------------------------------------------- */
+.rail { view-transition-name: rail; }
+.up   { view-transition-name: up; }
+
+::view-transition-group(rail),
+::view-transition-group(up) { animation: none; }
+
+::view-transition-old(rail),
+::view-transition-new(rail),
+::view-transition-old(up),
+::view-transition-new(up) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(rail), ::view-transition-new(up) { opacity: 1; }
+::view-transition-old(rail), ::view-transition-old(up) { opacity: 0; }
+
+/* The cursor is on a rail link at the moment you click one, so the
+   outgoing snapshot would catch the rail hover-expanded at 236px and
+   morph it down to 56px. Pin it for the duration. */
+:root:active-view-transition .rail {
+  clip-path: inset(0 calc(var(--edge-open) - var(--edge)) 0 0) !important;
+  transition: none !important;
+}
+:root:active-view-transition .rail__name,
+:root:active-view-transition .rail__txt,
+:root:active-view-transition .rail__foot { opacity: 0 !important; }
+
+/* A sheet left open would be baked into the outgoing snapshot. The
+   delegated handler in core.js closes it on any link click; this is
+   the belt to that braces. */
+:root:active-view-transition .msheet { display: none !important; }
+
+/* Landing on a fragment should not smooth-scroll under a transition. */
+:root:active-view-transition { scroll-behavior: auto; }
+
+/* -------------------------------------------------------------
+   THE ROOT: A PLATE, NOT A CROSSFADE
+   The outgoing page is held perfectly still and the incoming one
+   is clipped in over it. `animation: none` on the group is
+   required, or the UA's own geometry animation fights the clip.
+   `mix-blend-mode: normal` kills the default plus-lighter, which
+   would make the overlap glow.
+   ------------------------------------------------------------- */
+::view-transition-group(root) { animation: none; }
+
+::view-transition-old(root) {
+  animation: none;
+  opacity: 1;
+  mix-blend-mode: normal;
+  z-index: 0;
+}
+
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+  z-index: 1;
+  animation: 420ms cubic-bezier(.22, 1, .36, 1) both aperture;
+}
+
+/* going deeper: the doorway opens and the room fills the frame */
+@keyframes aperture {
+  from { clip-path: inset(46% 0 46% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* coming back: the plant floor rises into place */
+@keyframes floor-up {
+  from { clip-path: inset(100% 0 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* The destination names the direction. Chrome 125+ / Safari 18.2+;
+   an engine that cannot parse the selector drops the rule and keeps
+   the aperture above, which is a valid transition either way. */
+:root:active-view-transition-type(to-play)::view-transition-new(root) {
+  animation-name: aperture;
+}
+:root:active-view-transition-type(to-work)::view-transition-new(root) {
+  animation-name: floor-up;
+}
+
+/* -------------------------------------------------------------
+   REDUCED MOTION
+   Layer one is the real fix and lives in each page's inline
+   <head>: the opt-in never happens, so the browser performs a
+   plain instant navigation. That is the right degradation for a
+   full-viewport wipe, the motion class most associated with
+   vestibular discomfort.
+
+   Layer two is here in case a future edit opts in
+   unconditionally. Note that core.css's `*` reduced-motion block
+   does NOT reach these pseudo-elements — `*` matches elements,
+   and these are not elements.
+   ------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-image-pair(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

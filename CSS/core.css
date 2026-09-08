@@ -1,0 +1,636 @@
+/* =============================================================
+   core.css — THE PLANT
+   Tokens, the plate/press primitives, the type and spacing
+   scales, and the shell both worlds share: rail, skip link,
+   section headers, footer, back-to-top, browser surfaces.
+
+   Palette lives here as tokens only. play.css inverts the
+   tokens; it never touches structure. Everything below reads
+   through var(), so the inversion is free.
+   ============================================================= */
+
+/* ---------- tokens ---------- */
+:root {
+  /* material */
+  --ground:   #E6E3DA;   /* concrete: the default page surface   */
+  --ink:      #111110;   /* keylines, offsets, prose, hard black */
+  --paper:    #F6F5F1;   /* a lifted plate face                  */
+  --field:    #1B3AC9;   /* machine blue: panels own the surface */
+  --field-2:  #12279B;   /* pressed / darker blue                */
+  --signal:   #FFD400;   /* safety yellow: legends and numerals  */
+  --live:     #FF4A00;   /* RESERVED: the live job, the CTA      */
+  --faint:    #5E5C55;   /* secondary prose                      */
+  --fault:    #C40018;   /* a stopped job                        */
+  --fault-in: #F6F5F1;   /* type on a fault field                */
+  --ok:       #1B3AC9;   /* a good result                        */
+
+  /* on a blue field */
+  --on-field:  #F6F5F1;
+  --on-field-2:#BFC9F2;
+
+  /* construction */
+  --rule: 3px;           /* keyline weight  */
+  --drop: 6px;           /* hard offset     */
+  --drop-in: 3px;        /* pressed offset  */
+
+  /* space */
+  --s1: 6px;  --s2: 12px; --s3: 20px;
+  --s4: 32px; --s5: 52px; --s6: 84px;
+
+  /* shell */
+  --edge: 56px;
+  --edge-open: 236px;
+  --maxw: 1200px;
+  --course: 54px;        /* one whole slat on the board */
+
+  /* faces */
+  --display: 'Big Shoulders Display', 'Archivo Narrow', system-ui, sans-serif;
+  --text: 'Archivo', system-ui, -apple-system, sans-serif;
+
+  /* --- chrome ---
+     The shell is furniture, not room material: the rail, the sheet, the
+     skip link, the footer and the back-to-top look identical in both
+     worlds. Only the rooms invert. This is what keeps a visitor oriented
+     across the transition, and it is why these are separate tokens
+     rather than reads of --ink / --paper. play.css overrides exactly one
+     of them, the accent, so the corridor nods to the room you are in. */
+  --chrome:    #111110;
+  --chrome-fg: #F6F5F1;
+  --chrome-2:  #8E8B83;
+  --chrome-hd: #FFD400;
+  --chrome-hd-fg: #111110;
+  --chrome-acc: #1B3AC9;
+
+  /* --- the arcade ---
+     The other room's material, defined once here so the doorway can
+     quote it inside the plant and play.css can promote the same values
+     to a whole room. Two files, one source; they cannot drift. */
+  --arc-ground: #0E0E0E;
+  --arc-paper:  #1C1C1C;
+  --arc-ink:    #F6F5F1;
+  --arc-line:   #3A3A38;
+  --arc-red:    #FF2D16;
+  --arc-red-2:  #C41F0C;
+  --arc-gold:   #FFC12B;
+  --arc-faint:  #A8A49B;
+
+  color-scheme: light;
+}
+
+/* ---------- reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 17px;
+  line-height: 1.62;
+  font-variation-settings: 'wdth' 100, 'wght' 400;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, svg, iframe { display: block; max-width: 100%; }
+img { height: auto; }
+button, input, select, textarea { font: inherit; color: inherit; }
+h1, h2, h3, h4, p, dl, dd, dt, ul, figure { margin: 0; }
+ul { padding: 0; list-style: none; }
+a { color: inherit; }
+
+/* ---------- type ---------- */
+h1, h2, h3, h4, .dsp {
+  font-family: var(--display);
+  font-weight: 800;
+  line-height: .88;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(56px, 10.5vw, 118px); letter-spacing: -.022em; }
+h2 { font-size: clamp(38px, 6vw, 68px); }
+h3 { font-size: clamp(24px, 3vw, 32px); }
+h4 { font-size: 19px; letter-spacing: 0; }
+
+/* the plant's legend: every label, status and column head */
+.lg {
+  font-family: var(--text);
+  font-size: 11px;
+  font-variation-settings: 'wdth' 82, 'wght' 700;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+p { max-width: 66ch; }
+strong, b { font-variation-settings: 'wdth' 100, 'wght' 700; }
+
+.num { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+
+/* ---------- the plate: every surface in both worlds ---------- */
+.plate {
+  background: var(--paper);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--drop) var(--drop) 0 var(--ink);
+  border-radius: 0;
+}
+
+.plate--field { background: var(--field); color: var(--on-field); }
+.plate--ink   { background: var(--ink);   color: var(--paper); }
+
+/* ---------- press: the whole feedback vocabulary ---------- */
+.bt {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px var(--s3);
+  background: var(--paper);
+  color: var(--ink);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--drop) var(--drop) 0 var(--ink);
+  font-size: 13px;
+  font-variation-settings: 'wdth' 88, 'wght' 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform .1s steps(2), box-shadow .1s steps(2), background .1s steps(2);
+}
+
+.bt:hover { background: var(--signal); }
+
+.bt:active,
+.bt.is-press {
+  transform: translate(var(--drop-in), var(--drop-in));
+  box-shadow: var(--drop-in) var(--drop-in) 0 var(--ink);
+}
+
+/* RESERVED: primary action only */
+.bt--go { background: var(--live); }
+.bt--go:hover { background: var(--signal); }
+
+.bt[disabled] {
+  background: var(--ground);
+  color: var(--faint);
+  box-shadow: var(--drop) var(--drop) 0 var(--faint);
+  border-color: var(--faint);
+  cursor: not-allowed;
+}
+.bt[disabled]:hover { background: var(--ground); }
+.bt[disabled]:active { transform: none; box-shadow: var(--drop) var(--drop) 0 var(--faint); }
+
+/* Sprite symbols carry their own fill/stroke attributes against
+   currentColor, so nothing here should override them. */
+.bt svg { flex: 0 0 auto; }
+
+/* ---------- tag: a stamped part number ---------- */
+.tg {
+  display: inline-block;
+  padding: 5px 9px;
+  background: var(--ground);
+  border: 2px solid var(--ink);
+  font-size: 12px;
+  font-variation-settings: 'wdth' 86, 'wght' 600;
+  letter-spacing: .04em;
+  transition: background .1s steps(2), color .1s steps(2);
+}
+
+.tg--now {
+  background: var(--signal);
+  font-variation-settings: 'wdth' 86, 'wght' 800;
+}
+
+/* the one live thing, wherever it appears in prose */
+.live {
+  display: inline-block;
+  padding: 3px 8px;
+  background: var(--live);
+  color: var(--ink);
+  font-size: 12px;
+  font-variation-settings: 'wdth' 86, 'wght' 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.is-ok  { color: var(--ok); font-variation-settings: 'wdth' 88, 'wght' 700; }
+.is-bad { color: var(--fault); font-variation-settings: 'wdth' 88, 'wght' 700; }
+
+/* ---------- skip link ---------- */
+.skip {
+  position: fixed;
+  left: calc(var(--edge) + var(--s2));
+  z-index: 300;
+  padding: 11px var(--s3);
+  background: var(--chrome-hd);
+  color: var(--chrome-hd-fg);
+  border: var(--rule) solid var(--chrome);
+  box-shadow: var(--drop) var(--drop) 0 var(--chrome);
+  font-size: 12px;
+  font-variation-settings: 'wdth' 88, 'wght' 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  /* Parked off-screen rather than transformed: translateY(-200%) only
+     clears the element's own height, which on the mobile top bar left
+     it partly visible. */
+  top: -200px;
+}
+.skip:focus { top: var(--s2); }
+
+/* =============================================================
+   THE RAIL — a bolted index strip down the plant wall.
+   Markup is static in both documents so it works with JS off;
+   core.js only decorates it.
+   ============================================================= */
+/* The rail is ALWAYS its open width and clipped down to the collapsed
+   edge. Opening animates `clip-path`, which paints instead of laying
+   out — animating `width` here would relayout the rail on every frame.
+   It also keeps `.page`'s offset a static token, so nothing in the
+   document moves when the rail opens. Clipped-away area is not
+   hit-testable, so the collapsed strip is the only hover target. */
+.rail {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 60;
+  width: var(--edge-open);
+  display: flex;
+  flex-direction: column;
+  background: var(--chrome);
+  color: var(--chrome-fg);
+  overflow: hidden;
+  clip-path: inset(0 calc(var(--edge-open) - var(--edge)) 0 0);
+  transition: clip-path .26s cubic-bezier(.2, 1, .3, 1);
+}
+
+.rail:hover, .rail:focus-within { clip-path: inset(0 0 0 0); }
+
+.rail__top {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  height: var(--course);
+  flex: 0 0 auto;
+  padding: 0 14px;
+  background: var(--chrome-hd);
+  color: var(--chrome-hd-fg);
+  border-bottom: var(--rule) solid var(--chrome);
+}
+
+.rail__mark {
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  flex: 0 0 auto;
+}
+
+.rail__name {
+  font-size: 12px;
+  font-variation-settings: 'wdth' 80, 'wght' 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity .16s linear, transform .24s cubic-bezier(.2, 1, .3, 1);
+}
+.rail:hover .rail__name,
+.rail:focus-within .rail__name { opacity: 1; transform: none; }
+
+.rail__nav {
+  flex: 1 1 auto;
+  padding: var(--s2) 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.rail__lnk {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 9px 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background .1s steps(2), color .1s steps(2);
+}
+
+/* the punched hole: a rail item's only mark when collapsed */
+.rail__no {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  background: transparent;
+  border: 2px solid var(--chrome-fg);
+  transition: border-color .14s steps(2), background .14s steps(2),
+              transform .2s cubic-bezier(.2, 1, .3, 1);
+}
+/* a bolt being turned */
+.rail__lnk:hover .rail__no { transform: rotate(45deg); }
+
+.rail__txt {
+  font-size: 12px;
+  font-variation-settings: 'wdth' 82, 'wght' 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity .14s linear, transform .22s cubic-bezier(.2, 1, .3, 1);
+}
+.rail:hover .rail__txt,
+.rail:focus-within .rail__txt { opacity: 1; transform: none; }
+
+/* one slat lands after another, capped so the last is never a wait */
+.rail:hover .rail__nav li:nth-child(1) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(1) .rail__txt { transition-delay: .03s; }
+.rail:hover .rail__nav li:nth-child(2) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(2) .rail__txt { transition-delay: .05s; }
+.rail:hover .rail__nav li:nth-child(3) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(3) .rail__txt { transition-delay: .07s; }
+.rail:hover .rail__nav li:nth-child(4) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(4) .rail__txt { transition-delay: .09s; }
+.rail:hover .rail__nav li:nth-child(5) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(5) .rail__txt { transition-delay: .11s; }
+.rail:hover .rail__nav li:nth-child(6) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(6) .rail__txt { transition-delay: .13s; }
+.rail:hover .rail__nav li:nth-child(7) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(7) .rail__txt { transition-delay: .15s; }
+.rail:hover .rail__nav li:nth-child(8) .rail__txt,
+.rail:focus-within .rail__nav li:nth-child(8) .rail__txt { transition-delay: .17s; }
+
+.rail__lnk:hover { background: var(--chrome-acc); }
+.rail__lnk:hover .rail__no { border-color: var(--chrome-hd); }
+
+.rail__lnk.on { background: var(--chrome-hd); color: var(--chrome-hd-fg); }
+.rail__lnk.on .rail__no {
+  background: var(--chrome-hd-fg);
+  border-color: var(--chrome-hd-fg);
+}
+
+/* on the other world's page, its own entry is the current document */
+.rail__lnk[aria-current="page"] {
+  background: var(--live);
+  color: var(--chrome-hd-fg);
+}
+.rail__lnk[aria-current="page"] .rail__no {
+  background: var(--chrome-hd-fg);
+  border-color: var(--chrome-hd-fg);
+}
+
+.rail__foot {
+  flex: 0 0 auto;
+  padding: 12px 14px;
+  border-top: var(--rule) solid var(--chrome-acc);
+  font-size: 10px;
+  font-variation-settings: 'wdth' 80, 'wght' 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--chrome-hd);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity .16s linear .1s;
+}
+.rail:hover .rail__foot, .rail:focus-within .rail__foot { opacity: 1; }
+
+/* the burger, only ever visible on the mobile top bar */
+.menubt {
+  display: none;
+  margin-left: auto;
+  width: 38px;
+  height: 32px;
+  padding: 0;
+  background: var(--chrome);
+  border: 2px solid var(--chrome);
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+.menubt i {
+  display: block;
+  width: 18px;
+  height: 3px;
+  background: var(--chrome-hd);
+  transition: transform .2s cubic-bezier(.2, 1, .3, 1), opacity .14s linear;
+}
+.menubt[aria-expanded="true"] i:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menubt[aria-expanded="true"] i:nth-child(2) { opacity: 0; }
+.menubt[aria-expanded="true"] i:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* the mobile sheet */
+.msheet {
+  display: none;
+  position: fixed;
+  top: var(--course);
+  left: 0;
+  right: 0;
+  z-index: 59;
+  max-height: calc(100dvh - var(--course));
+  overflow-y: auto;
+  background: var(--chrome);
+  border-bottom: var(--rule) solid var(--chrome-hd);
+}
+
+.msheet a {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 15px var(--s3);
+  border-bottom: 1px solid var(--chrome-acc);
+  color: var(--chrome-fg);
+  font-size: 13px;
+  font-variation-settings: 'wdth' 82, 'wght' 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.msheet a span {
+  width: 11px; height: 11px;
+  border: 2px solid var(--chrome-fg);
+  flex: 0 0 auto;
+}
+.msheet a.on { background: var(--chrome-hd); color: var(--chrome-hd-fg); }
+.msheet a.on span { background: var(--chrome-hd-fg); border-color: var(--chrome-hd-fg); }
+.msheet a[aria-current="page"] { background: var(--live); color: var(--chrome-hd-fg); }
+.msheet a[aria-current="page"] span {
+  background: var(--chrome-hd-fg);
+  border-color: var(--chrome-hd-fg);
+}
+
+/* =============================================================
+   PAGE SHELL
+   ============================================================= */
+.page { margin-left: var(--edge); overflow-x: clip; }
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--s5);
+}
+
+.sheet { padding: var(--s6) 0 0; }
+.sheet:last-of-type { padding-bottom: var(--s6); }
+
+/* the section boundary: a bolted ink bar, not a hairline */
+.rule {
+  height: var(--rule);
+  background: var(--ink);
+  margin-bottom: var(--s5);
+}
+
+/* section header — more space above than below */
+.shd { margin-bottom: var(--s5); }
+.shd h2 { margin-bottom: var(--s3); }
+.shd p {
+  color: var(--faint);
+  font-size: 17px;
+  max-width: 62ch;
+}
+
+/* ---------- footer ---------- */
+.ft {
+  margin-top: var(--s6);
+  padding: var(--s4) 0;
+  background: var(--chrome);
+  color: var(--chrome-fg);
+  border-top: var(--rule) solid var(--chrome);
+}
+
+.ft__in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  font-size: 13px;
+}
+.ft__in > span { color: var(--chrome-2); }
+
+.ft__lnks { display: flex; flex-wrap: wrap; gap: var(--s3); }
+.ft__lnks a {
+  color: var(--chrome-hd);
+  font-variation-settings: 'wdth' 88, 'wght' 700;
+  font-size: 12px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+.ft__lnks a:hover { border-bottom-color: var(--chrome-hd); }
+
+/* ---------- back to top ---------- */
+.up {
+  position: fixed;
+  right: var(--s4);
+  bottom: var(--s4);
+  z-index: 55;
+  width: 50px;
+  height: 50px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--chrome-hd);
+  color: var(--chrome-hd-fg);
+  border: var(--rule) solid var(--chrome);
+  box-shadow: var(--drop) var(--drop) 0 var(--chrome);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .16s steps(2), transform .1s steps(2), box-shadow .1s steps(2);
+}
+.up.show { opacity: 1; pointer-events: auto; }
+.up:active {
+  transform: translate(var(--drop-in), var(--drop-in));
+  box-shadow: var(--drop-in) var(--drop-in) 0 var(--chrome);
+}
+
+/* =============================================================
+   BROWSER SURFACES — the parts we did not draw still carry
+   the design.
+   ============================================================= */
+::selection { background: var(--signal); color: var(--ink); }
+
+:focus-visible {
+  outline: var(--rule) solid var(--live);
+  outline-offset: 2px;
+}
+
+* { scrollbar-width: thin; scrollbar-color: var(--ink) var(--ground); }
+
+::-webkit-scrollbar { width: 13px; height: 13px; }
+::-webkit-scrollbar-track { background: var(--ground); }
+::-webkit-scrollbar-thumb { background: var(--ink); border: 3px solid var(--ground); }
+::-webkit-scrollbar-thumb:hover { background: var(--field); }
+
+/* =============================================================
+   RESPONSIVE — narrow screens drop columns; the type holds.
+   ============================================================= */
+@media (max-width: 1080px) {
+  .wrap { padding: 0 var(--s4); }
+}
+
+@media (max-width: 900px) {
+  /* the rail lies down into a top bar */
+  .rail {
+    inset: 0 0 auto 0;
+    width: 100%;
+    height: var(--course);
+    flex-direction: row;
+    clip-path: none;
+    border-bottom: var(--rule) solid var(--chrome);
+  }
+  .rail:hover, .rail:focus-within { clip-path: none; }
+  .rail__top {
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+    border-bottom: 0;
+  }
+  .rail__name { opacity: 1; }
+  .rail__nav, .rail__foot { display: none; }
+  .menubt { display: flex; }
+  .msheet { display: none; }
+  .msheet.open {
+    display: block;
+    animation: sheet-down .24s cubic-bezier(.2, 1, .3, 1) both;
+  }
+  /* the same material as the page transition, one floor down */
+  @keyframes sheet-down {
+    from { clip-path: inset(0 0 100% 0); }
+    to   { clip-path: inset(0 0 0 0); }
+  }
+
+  .page { margin-left: 0; padding-top: var(--course); }
+  .skip { left: var(--s2); }
+  .skip:focus { top: calc(var(--course) + var(--s2)); }
+
+  :root { --s6: 60px; --s5: 40px; }
+}
+
+@media (max-width: 620px) {
+  .wrap { padding: 0 var(--s3); }
+  :root { --drop: 5px; --s6: 48px; }
+  .up { right: var(--s3); bottom: var(--s3); }
+}
+
+/* =============================================================
+   REDUCED MOTION
+   Note: the `*` selector does NOT reach ::view-transition-*
+   pseudos. Those are handled in transition.css, which also
+   gates the navigation opt-in itself.
+   ============================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

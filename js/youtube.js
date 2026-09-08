@@ -160,6 +160,19 @@
     }
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
-  else run();
+  /* Do not race the proxies while this page is only being speculated.
+     The work page prerenders play.html on hover, and scripts run
+     normally in a prerendered document — so without this gate, hover
+     jitter over the doorway would burn free-tier proxy quota on
+     navigations that never happen. Wait for activation instead. */
+  function boot() {
+    if (document.prerendering) {
+      document.addEventListener('prerenderingchange', run, { once: true });
+      return;
+    }
+    run();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
