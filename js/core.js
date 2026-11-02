@@ -20,10 +20,6 @@
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const ic = (id, n) => `<svg width="${n || 14}" height="${n || 14}" aria-hidden="true"><use href="#${id}"/></svg>`;
 
-  const today = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
-  const day = (iso) => { const d = new Date(iso + 'T00:00:00'); d.setHours(0, 0, 0, 0); return d; };
-  const fmt = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }).toUpperCase();
-
   /* One place asks whether motion is welcome, so the board's flap,
      the keyline draw and anything added later cannot drift apart.
      Queried live rather than cached: the setting can change without
@@ -236,7 +232,7 @@
     });
   }
 
-  window.SITE = { $, $$, esc, ic, today, day, fmt, reduced, copy, HERE, NAV, boot: [] };
+  window.SITE = { $, $$, esc, ic, reduced, copy, HERE, NAV, boot: [] };
 
   document.addEventListener('DOMContentLoaded', () => {
     nav();

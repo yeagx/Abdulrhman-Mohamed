@@ -224,7 +224,7 @@ h1 .two { display: block; color: var(--field); }
 
 .brow__s[data-s="done"] { color: var(--signal); }
 
-/* rank by inversion: the live course is the loudest row on the page */
+/* rank by inversion: the live row is the loudest row on the page */
 .brow__s[data-s="live"] {
   background: var(--live);
   color: var(--ink);
@@ -542,25 +542,56 @@ h1 .two { display: block; color: var(--field); }
 .prj__cell:nth-child(2n) { border-right: 0; }
 .prj__cell:nth-last-child(-n+2):nth-child(2n+1),
 .prj__cell:last-child { border-bottom: 0; }
+/* an odd stage out takes the whole row rather than leaving a blank
+   plate beside it */
+.prj__cell:last-child:nth-child(2n+1) { grid-column: 1 / -1; border-right: 0; }
 .prj__cell h4 {
   margin-bottom: var(--s2);
   color: var(--field);
 }
 .prj__cell p { font-size: 15px; line-height: 1.6; }
 
-.prj__delta {
-  display: block;
-  margin-top: var(--s2);
-  padding: 9px 11px;
-  background: var(--ground);
-  border-left: var(--rule) solid var(--live);
-  font-size: 13px;
+/* The readout strip: a build's counters, printed the way the board
+   prints its own — machine blue, yellow numerals, a keyline between
+   each. The keylines come from the gap: the strip is ink and every
+   counter is a blue cell laid on it, so a rule sits between each pair
+   however the row wraps. Flex rather than grid, so a short last row
+   stretches across instead of leaving an empty ink cell behind. */
+.prj__gauge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--rule);
+  background: var(--ink);
+  border-bottom: var(--rule) solid var(--ink);
 }
-.prj__delta b {
-  font-size: 10px;
-  letter-spacing: .11em;
+.prj__gauge > div {
+  flex: 1 1 170px;
+  display: flex;
+  /* the figure prints above what it counts; the markup keeps the
+     legend first so it is read as a term and its value */
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: var(--s3) var(--s4) 22px;
+  background: var(--field);
+}
+.prj__gauge dd {
+  font-family: var(--display);
+  font-size: clamp(34px, 4.2vw, 46px);
+  font-weight: 800;
+  line-height: .9;
+  letter-spacing: -.01em;
+  color: var(--signal);
+  white-space: nowrap;
+}
+.prj__gauge dt {
+  max-width: 26ch;
+  font-size: 11px;
+  font-variation-settings: 'wdth' 82, 'wght' 700;
+  letter-spacing: .08em;
+  line-height: 1.4;
   text-transform: uppercase;
-  font-variation-settings: 'wdth' 82, 'wght' 800;
+  color: var(--on-field-2);
 }
 
 .prj__ft {
@@ -721,25 +752,23 @@ a.also__row:hover > span { color: var(--ink); }
 .kit__items { display: flex; flex-wrap: wrap; gap: var(--s1); }
 
 /* =============================================================
-   TRAINING — courses as plates, the live timetable as a blue
-   panel with its own scroller. This is the only genuinely live
-   data on the site, so it gets the field colour.
+   TRAINING — four course plates racked two-up. Each row stretches
+   to its taller plate, so the rack reads as one bolted unit rather
+   than a ragged stack. Nothing here is live any more; a programme
+   flagged `current` in data.js takes the orange offset again.
    ============================================================= */
 .learn {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: var(--s5);
-  align-items: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s4);
 }
 
 .crs {
   background: var(--paper);
   border: var(--rule) solid var(--ink);
   box-shadow: var(--drop) var(--drop) 0 var(--ink);
-  margin-bottom: var(--s4);
   transition: transform .09s steps(2), box-shadow .09s steps(2);
 }
-.crs:last-child { margin-bottom: 0; }
 .crs.is-now { box-shadow: var(--drop) var(--drop) 0 var(--live); }
 
 /* the same lift as a project plate — one vocabulary, every plate */
@@ -785,156 +814,6 @@ a.also__row:hover > span { color: var(--ink); }
 .crs.is-now .crs__hd .org { color: var(--ink); }
 .crs__bd { padding: var(--s3); }
 .crs__bd p { font-size: 15px; line-height: 1.6; }
-
-.syl {
-  background: var(--field);
-  color: var(--on-field);
-  border: var(--rule) solid var(--ink);
-  box-shadow: var(--drop) var(--drop) 0 var(--ink);
-  position: sticky;
-  top: var(--s3);
-}
-
-.syl__hd {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--s1) var(--s2);
-  padding: var(--s3);
-  background: var(--ink);
-  border-bottom: var(--rule) solid var(--ink);
-}
-.syl__hd b {
-  font-family: var(--display);
-  font-size: 21px;
-  font-weight: 800;
-  text-transform: uppercase;
-  color: var(--signal);
-  line-height: 1;
-}
-.syl__hd .crs__when { color: var(--paper); }
-.syl__next {
-  width: 100%;
-  padding: 6px 9px;
-  background: var(--live);
-  color: var(--ink);
-  font-size: 11px;
-  font-variation-settings: 'wdth' 82, 'wght' 800;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-/* Real course position, derived from the real agenda dates. The bar
-   is drawn from the same number that is printed beside it, so the
-   graphic cannot disagree with the text. */
-.syl__prog {
-  position: relative;
-  width: 100%;
-  padding: 7px 9px 11px;
-  background: var(--field-2);
-  color: var(--on-field);
-  font-size: 10px;
-  font-variation-settings: 'wdth' 80, 'wght' 800;
-  letter-spacing: .11em;
-  text-transform: uppercase;
-}
-.syl__prog::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: var(--rule);
-  width: calc(var(--done, 0) * 1%);
-  background: var(--signal);
-}
-
-.syl__list {
-  max-height: 460px;
-  overflow-y: auto;
-  scrollbar-color: var(--signal) var(--field-2);
-}
-.syl__list::-webkit-scrollbar-track { background: var(--field-2); }
-.syl__list::-webkit-scrollbar-thumb { background: var(--signal); border-color: var(--field-2); }
-
-.syl__i {
-  display: grid;
-  grid-template-columns: 46px minmax(0, 1fr);
-  gap: var(--s2);
-  padding: 14px var(--s3);
-  border-bottom: 1px solid var(--field-2);
-  transition: background .1s steps(2);
-}
-.syl__i:last-child { border-bottom: 0; }
-.syl__i:hover { background: var(--field-2); }
-/* the module actually running keeps its orange field */
-.syl__i.now:hover { background: var(--live); }
-
-.syl__n {
-  font-family: var(--display);
-  font-size: 24px;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--on-field-2);
-  font-variant-numeric: tabular-nums;
-}
-.syl__i.done .syl__n { color: var(--signal); }
-.syl__i.now {
-  background: var(--live);
-  color: var(--ink);
-}
-.syl__i.now .syl__n { color: var(--ink); }
-
-.syl__t { display: grid; gap: 5px; }
-.syl__t b {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s2);
-  font-size: 15px;
-  font-variation-settings: 'wdth' 92, 'wght' 700;
-}
-.syl__here {
-  padding: 3px 7px;
-  background: var(--ink);
-  color: var(--signal);
-  font-size: 9px;
-  font-variation-settings: 'wdth' 80, 'wght' 800;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.syl__topics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  font-size: 13px;
-  color: var(--on-field-2);
-  line-height: 1.5;
-}
-.syl__i.now .syl__topics { color: var(--ink); }
-
-.syl__s {
-  padding: 3px 7px;
-  background: var(--field-2);
-  color: var(--on-field);
-  font-size: 12px;
-}
-.syl__i.now .syl__s { background: var(--paper); color: var(--ink); }
-.syl__s.is-done { opacity: .55; text-decoration: line-through; }
-.syl__s.is-today {
-  background: var(--signal);
-  color: var(--ink);
-  font-variation-settings: 'wdth' 92, 'wght' 800;
-}
-
-.syl__date {
-  font-size: 10px;
-  font-variation-settings: 'wdth' 80, 'wght' 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--on-field-2);
-  font-variant-numeric: tabular-nums;
-}
-.syl__i.now .syl__date { color: var(--ink); }
 
 /* =============================================================
    THE DOORWAY
@@ -1264,9 +1143,7 @@ a.also__row:hover > span { color: var(--ink); }
    RESPONSIVE
    ============================================================= */
 @media (max-width: 1020px) {
-  .learn, .sink { grid-template-columns: minmax(0, 1fr); }
-  .syl { position: static; }
-  .syl__list { max-height: 400px; }
+  .sink { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 940px) {
@@ -1291,11 +1168,14 @@ a.also__row:hover > span { color: var(--ink); }
   /* the board drops its Detail course */
   .board__hd, .brow { grid-template-columns: 92px minmax(0, 1fr) 124px; }
   .board__hd span:nth-child(3), .brow__n { display: none; }
-  .prj__body { grid-template-columns: minmax(0, 1fr); }
+  .prj__body, .learn { grid-template-columns: minmax(0, 1fr); }
   .prj__cell { border-right: 0; }
   /* it stops being a corner chip and becomes a full-width line */
   .prj__meta { white-space: normal; }
   .prj__cell:last-child { border-bottom: 0; }
+  /* the two-up rule clears the bottom keyline of an odd second-to-last
+     cell; stacked, that cell has a neighbour below it again */
+  .prj__cell:nth-last-child(2):nth-child(2n+1) { border-bottom: var(--rule) solid var(--ink); }
   .kit__row { grid-template-columns: minmax(0, 1fr); }
   .kit__name { padding-top: 0; }
   .door__in { grid-template-columns: minmax(0, 1fr); align-items: start; }
@@ -1311,6 +1191,7 @@ a.also__row:hover > span { color: var(--ink); }
   .also__row { grid-template-columns: minmax(0, 1fr) auto; }
   .also__row > span { grid-column: 1 / -1; }
   .prj__hd { grid-template-columns: minmax(0, 1fr); }
+  .prj__gauge > div { flex-basis: calc(50% - var(--rule)); padding: 16px var(--s3) 18px; }
   .grp b { font-size: 18px; }
   .grp span { margin-left: 0; flex-basis: 100%; }
   .rcpt__ln { grid-template-columns: minmax(0, 1fr); gap: 2px; }

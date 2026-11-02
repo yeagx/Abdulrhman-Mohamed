@@ -8,63 +8,12 @@
 (function () {
   'use strict';
 
-  const { $, $$, esc, ic, today, day, fmt, copy } = window.SITE;
-
-  /* =========================================================
-     Course position is derived from the real agenda dates.
-     Read only by hero(), board() and learning() — all of which
-     live on this page, which is why it is not in core.
-
-     A function rather than a one-shot IIFE so the page can
-     re-derive it at midnight: everything dated here hangs off
-     `today`, and a tab left open overnight would otherwise keep
-     yesterday's module marked as the one running.
-     ========================================================= */
-  const derive = () => {
-    const byMod = {}, all = [];
-    SIC.sessions.forEach(([n, m, topic, iso]) => {
-      const rec = { n, m, topic, d: day(iso) };
-      (byMod[m] = byMod[m] || []).push(rec);
-      all.push(rec);
-    });
-    all.sort((a, b) => a.d - b.d);
-
-    const mods = SIC.modules.map((m) => {
-      const ss = (byMod[m.n] || []).slice().sort((a, b) => a.d - b.d);
-      return {
-        n: m.n, name: m.name, sessions: ss,
-        start: ss.length ? ss[0].d : null,
-        end: ss.length ? ss[ss.length - 1].d : null,
-        state: 'todo'
-      };
-    });
-
-    let cur = null;
-    mods.forEach((m) => {
-      if (!m.start) return;
-      if (m.end < today) m.state = 'done';
-      else if (m.start <= today && today <= m.end) { m.state = 'now'; cur = m; }
-    });
-    if (!cur) {
-      cur = mods.find((m) => m.start && m.start > today) || mods[mods.length - 1];
-      if (cur) cur.state = 'now';
-    }
-
-    return {
-      mods, cur,
-      todays: all.find((s) => s.d.getTime() === today.getTime()) || null,
-      next: all.find((s) => s.d > today) || null,
-      done: all.filter((s) => s.d < today).length,
-      total: all.length
-    };
-  };
-
-  let sic = derive();
+  const { $, $$, esc, ic, copy } = window.SITE;
 
   /* ---------- hero ---------- */
   function hero() {
     const n = $('#heroNow');
-    if (n) n.textContent = `${NOW.shortCompany || NOW.company} · module ${sic.cur ? sic.cur.n : '—'} of ${sic.mods.length}`;
+    if (n) n.textContent = NOW.short;
 
     const tb = $('#titleBlock');
     if (tb) tb.innerHTML = [
@@ -122,19 +71,21 @@
   }
 
   /* Every value on the board is a real figure, never an invented
-     departure time. Exactly one row is live. */
+     departure time. Exactly one row is live: with every programme
+     finished, the job left running is the visitor's — the last row,
+     the one a recruiter takes. */
   function board() {
     const el = $('#board');
     if (!el) return;
 
     const rows = [
       ['2022–26', 'About me',         PROFILE.schoolShort,                      'arrived',  'about'],
-      ['Now',     "What I'm doing",   'Samsung IC',                             'running',  'now'],
+      ['Now',     "What I'm doing",   'Open to work',                           'open',     'now'],
       ['2025–26', "What I've built",  `${WORK.length + (typeof GRAD !== 'undefined' ? GRAD.length : 0)} + ${ALSO.length} builds`, 'arrived',  'work'],
       ['—',       'What I work with', `${TOOLKIT.length} groups`,               'arrived',  'toolkit'],
-      ['Now',     'Training',         `module ${sic.cur ? sic.cur.n : '—'}/${sic.mods.length}`, 'boarding', 'learning'],
+      ['2024–26', 'Training',         `${TRAINING.length} programmes`,          'arrived',  'learning'],
       ['—',       'Away from work',   'YouTube · Clash',                        'arrived',  'personal'],
-      ['24 hrs',  'Get in touch',     'Cairo · remote',                         'open',     'contact']
+      ['24 hrs',  'Get in touch',     'Cairo · remote',                         'boarding', 'contact']
     ];
 
     /* The board's own route to the other world. It must NOT carry a
@@ -147,8 +98,7 @@
          <span>When</span><span>Destination</span><span>Detail</span><span>Status</span>
        </div>` +
       rows.map(([when, dest, detail, status, id]) => {
-        const s = status === 'boarding' ? 'live'
-          : (status === 'open' || status === 'running') ? 'done' : '';
+        const s = status === 'boarding' ? 'live' : status === 'open' ? 'done' : '';
         return `
           <a class="brow" href="${to(id)}">
             <span class="brow__t">${esc(when)}</span>
@@ -176,14 +126,14 @@
     ].map(([a, b]) => `<div class="tblock__row"><dt>${a}</dt><dd>${b}</dd></div>`).join('');
   }
 
-  /* ---------- current role ---------- */
+  /* ---------- where I am now ---------- */
   function now() {
     const b = $('#nowBlock');
     if (!b) return;
     b.innerHTML = `
       <div class="now__hd">
         <h3>${esc(NOW.title)}</h3>
-        <span class="co">${esc(NOW.company)}</span>
+        <span class="co">${esc(NOW.status)}</span>
         <span class="wh">${esc(NOW.when)} · ${esc(NOW.where)}</span>
       </div>
       <div class="now__bd">
@@ -192,7 +142,7 @@
         <div class="callout"><b>${esc(NOW.note.h)}</b>${esc(NOW.note.p)}</div>
       </div>`;
 
-    /* the role before this one — a quiet ruled strip, not a second panel */
+    /* what came before — a quiet ruled strip, not a second panel */
     const pv = $('#past');
     if (pv && typeof PAST !== 'undefined' && PAST.length) pv.innerHTML =
       `<div class="past__hd">Before this</div>` +
@@ -221,6 +171,15 @@
   const slug = (s) =>
     'p-' + String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
+  /* The readout strip: the figures a build is judged on, printed the
+     way a machine prints its counters — a blue field, yellow numerals,
+     one keyline between each. A <dl> so each figure is read with what
+     it counts; the stylesheet stands the figure on top of its legend. */
+  const gauge = (g) => g && g.length ? `
+      <dl class="prj__gauge">
+        ${g.map((x) => `<div><dt>${esc(x.k)}</dt><dd class="num">${esc(x.v)}</dd></div>`).join('')}
+      </dl>` : '';
+
   const card = (p) => `
     <article class="prj" id="${slug(p.name)}">
       <div class="prj__hd">
@@ -230,13 +189,12 @@
           <p class="prj__lead">${esc(p.lead)}</p>
         </div>
         <div class="prj__meta">${esc(p.meta)}</div>
-      </div>
+      </div>${gauge(p.gauge)}
       <div class="prj__body">
         ${p.blocks.map((b) => `
           <div class="prj__cell">
             <h4>${esc(b.h)}</h4>
             <p>${esc(b.p)}</p>
-            ${b.d ? `<span class="prj__delta"><b>${esc(b.dl || 'Moved:')}</b> ${esc(b.d)}</span>` : ''}
           </div>`).join('')}
       </div>
       <div class="prj__ft">
@@ -292,7 +250,7 @@
       </div>`).join('');
   }
 
-  /* ---------- training + the live timetable ---------- */
+  /* ---------- training ---------- */
   function learning() {
     const c = $('#courses');
     if (c) c.innerHTML = TRAINING.map((t) => `
@@ -304,54 +262,6 @@
         </div>
         <div class="crs__bd"><p>${esc(t.body)}</p></div>
       </div>`).join('');
-
-    const s = $('#syllabus');
-    if (!s) return;
-
-    const up = sic.todays
-      ? `today · ${sic.todays.topic}`
-      : (sic.next ? `next · ${sic.next.topic}, ${fmt(sic.next.d)}` : 'course complete');
-
-    /* The session count was already derived and never shown. It is a
-       real figure off the real agenda, so it can go on the page
-       (rule 6). The bar is drawn from the same number — JS writes
-       the number, core's stylesheet owns the colour (rule 8). */
-    const pct = sic.total ? Math.round((sic.done / sic.total) * 100) : 0;
-
-    s.innerHTML = `
-      <div class="syl__hd">
-        <b>Samsung big data — timetable</b>
-        <span class="crs__when">module ${sic.cur ? sic.cur.n : '—'} of ${sic.mods.length}</span>
-        <span class="syl__next">${esc(up)}</span>
-        <span class="syl__prog num" style="--done:${pct}">
-          session ${sic.done} of ${sic.total} · ${pct}% done
-        </span>
-      </div>
-      <ul class="syl__list">
-        ${sic.mods.map((m) => {
-          const cls = m.state === 'done' ? 'done' : (m.state === 'now' ? 'now' : '');
-          const range = m.start ? `${fmt(m.start)} – ${fmt(m.end)}` : '';
-          const detail = m.state === 'now'
-            ? m.sessions.map((x) =>
-                `<span class="syl__s${x.d < today ? ' is-done' : (x.d.getTime() === today.getTime() ? ' is-today' : '')}">${esc(x.topic)}</span>`
-              ).join('')
-            : esc(m.sessions.map((x) => x.topic).join(', '));
-
-          return `
-            <li class="syl__i ${cls}">
-              <span class="syl__n">${String(m.n).padStart(2, '0')}</span>
-              <span class="syl__t">
-                <b>${esc(m.name)}${m.state === 'now' ? '<span class="syl__here">here now</span>' : ''}</b>
-                <span class="syl__topics">${detail}</span>
-                ${range ? `<span class="syl__date">${range}</span>` : ''}
-              </span>
-            </li>`;
-        }).join('')}
-      </ul>`;
-
-    const el = s.querySelector('.syl__i.now');
-    const list = s.querySelector('.syl__list');
-    if (el && list) list.scrollTop = Math.max(0, el.offsetTop - list.clientHeight / 2 + el.offsetHeight / 2);
   }
 
   /* =========================================================
@@ -549,38 +459,12 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(land);
   }
 
-  /* ---------- midnight ----------
-     Every date on this page hangs off `today`, computed once when
-     core.js loaded. A tab left open overnight would keep yesterday's
-     module marked as the one running and yesterday's session marked
-     as today's. Re-derive at the local day boundary and re-render
-     the three sections that read dates.
-
-     `today` is core's own Date, mutated in place on purpose: the
-     scroll spy and the arcade read the same object, and two
-     different ideas of "today" in one page is the bug this exists
-     to prevent. The board is re-rendered but the flap is NOT re-run
-     — the arrival already happened. */
-  function rollover() {
-    const now = new Date();
-    const next = new Date(now);
-    next.setHours(24, 0, 0, 30);          /* just past the boundary */
-
-    setTimeout(() => {
-      today.setTime(new Date().setHours(0, 0, 0, 0));
-      sic = derive();
-      try { hero(); board(); learning(); } catch (e) { console.error('[work] rollover render failed', e); }
-      rollover();                          /* and again tomorrow */
-    }, Math.max(1000, next - now));
-  }
-
   window.SITE.boot.push(() => {
     hero(); board(); about(); now(); work(); kit(); learning();
     clock();
     parts();          /* after every section: it indexes what is on the page */
     deeplink();
     settle();       /* after the racks exist, so a copied link lands true */
-    rollover();
     flap();
   });
 })();

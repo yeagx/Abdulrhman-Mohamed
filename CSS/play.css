@@ -93,11 +93,18 @@
 .off {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  /* The two panels are always one height. Side by side, the row
+     stretches both to the taller one; stacked, every implicit row is
+     1fr of the same track, which resolves to the tallest panel too —
+     so the rule holds in both layouts, whichever panel is longer. */
+  grid-auto-rows: 1fr;
   gap: var(--s5);
-  align-items: start;
+  align-items: stretch;
 }
 
 .zone {
+  display: flex;
+  flex-direction: column;
   background: var(--paper);
   border: var(--rule) solid var(--ink);
   box-shadow: var(--drop) var(--drop) 0 var(--ink);
@@ -134,7 +141,18 @@
   color: var(--accent);
 }
 
-.z__bd { padding: var(--s4); }
+.z__bd {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: var(--s4);
+}
+/* The spare height goes ABOVE each panel's last block, so the shorter
+   panel ends on its footer line rather than on a void: the upload list
+   on one side, the note on the other. The block before it keeps its
+   own gap, because an auto margin is zero when there is no slack. */
+.z__bd > :last-child { margin-top: auto; }
+.yt__now, .cr__deck { margin-bottom: var(--s3); }
 
 .ytmark { display: flex; flex: 0 0 auto; }
 
@@ -197,6 +215,48 @@
   overflow: hidden;
 }
 .yt__frame iframe { width: 100%; height: 100%; border: 0; }
+
+/* The frame starts as a real link carrying the upload's own thumbnail,
+   and only becomes a YouTube player when someone presses play. Nothing
+   on the page can show YouTube's error card, and the panel costs one
+   image instead of a player's worth of scripts until it is used. */
+.yt__play {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: var(--ground);
+  text-decoration: none;
+}
+.yt__play img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* the play control is a plate like every other control on the site */
+.yt__go {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 54px;
+  background: var(--accent);
+  border: var(--rule) solid var(--ink);
+  box-shadow: var(--drop) var(--drop) 0 var(--ink);
+  transform: translate(-50%, -50%);
+  transition: transform .1s steps(2), box-shadow .1s steps(2);
+}
+.yt__play:hover .yt__go,
+.yt__play:focus-visible .yt__go {
+  transform: translate(calc(-50% - var(--drop-in)), calc(-50% - var(--drop-in)));
+  box-shadow: calc(var(--drop) + var(--drop-in)) calc(var(--drop) + var(--drop-in)) 0 var(--ink);
+}
+.yt__play:active .yt__go {
+  transform: translate(calc(-50% + var(--drop-in)), calc(-50% + var(--drop-in)));
+  box-shadow: var(--drop-in) var(--drop-in) 0 var(--ink);
+}
 
 /* the placeholder reserves the frame's final height, so nothing
    collapses behind the page transition */
