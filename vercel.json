@@ -1,8 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/youtube.js": { "maxDuration": 30 }
+  },
   "headers": [
     {
-      "source": "/(CSS|js)/(.*)",
+      "source": "/(CSS|js|data)/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
       ]

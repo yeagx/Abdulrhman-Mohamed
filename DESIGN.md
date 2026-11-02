@@ -60,7 +60,9 @@ Measured on concrete: prose 17.4:1, secondary 5.3:1, `--fault` 4.9:1, `--ok` 4.8
 
 `--live` is a discipline, not a palette entry. Orange fails contrast as type on both grounds, so it
 only ever appears as a **field with near-black type on it** — the boarding row, the primary button,
-the live module, the current-page rail entry. If it appears anywhere else, that is a bug.
+the "open to" chip, a course plate flagged `current`, the current-page rail entry. If it appears
+anywhere else, that is a bug — which is exactly what the old project "delta" strip was: an orange
+side-stripe on concrete, removed for the readout strip below.
 
 ### The arcade inversion
 
@@ -102,6 +104,14 @@ element the transition can hold perfectly still. `play.css` overrides exactly on
   stacked shadows read as clutter. The bar names a *set*, which is information architecture, not an
   eyebrow over a heading. The separation is the point: the graduation project is a full-stack AI
   product, and grouping it apart is what lets the data engineering work be read on its own terms.
+- **The readout strip.** Every project plate carries its counters in one band between the ink header
+  and the stage cells: machine blue, Big Shoulders numerals in safety yellow, a legend under each in
+  `--on-field-2`. It is the board and the manifest again, at plate scale. The keylines are the strip's
+  own ink background showing through a `--rule` gap, and the cells are flex rather than grid, so a
+  short last row stretches across instead of leaving an empty ink cell. Markup is a `<dl>` with the
+  legend first; `column-reverse` stands the figure on top. The figures live in `gauge` in `data.js`
+  and are real numbers from the linked repo or they are not there. They replaced a per-cell
+  "Scope: / Moved:" strip that repeated a generic label under every paragraph.
 - **The portrait is cropped on purpose, and only where there is room.** At two columns it is a 4:5
   plate with `object-position: 50% 18%`, so the frame keeps the head rather than the pavement. Once
   the layout goes single-column the crop is dropped entirely (`aspect-ratio: auto`) and the whole
@@ -115,7 +125,7 @@ element the transition can hold perfectly still. `play.css` overrides exactly on
 Two faces.
 
 - **Big Shoulders Display** (variable 100–900) for display: the name, every `h2`, board
-  destinations, module numerals, metric figures. An industrial condensed face out of a signage
+  destinations, readout-strip figures, metric figures. An industrial condensed face out of a signage
   tradition; it holds at plate scale and stays condensed enough to set a long name on one line.
 - **Archivo** (variable) for everything read as language, worked across its `wdth`/`wght` axes.
 
@@ -214,8 +224,8 @@ transforms, both under 200ms.
   the arcade. It carries no transition name, and neither does the doorway (see above).
 - Both pages prerender the other on hover via Speculation Rules, matched by **selector** rather than
   path so it holds on a GitHub Pages project subpath as well as at a domain root. `youtube.js` waits
-  for `prerenderingchange` before racing its proxies, so hover jitter over the doorway cannot burn
-  free-tier proxy quota on navigations that never happen.
+  for `prerenderingchange` before calling out, so hover jitter over the doorway cannot spend function
+  invocations on navigations that never happen.
 
 ### Reduced motion and degradation
 
@@ -245,9 +255,13 @@ narrow breakpoint instead of pretending 9px is a real dimension. Project cards a
 lift; buttons press; rows light. That is the whole set.
 
 Everything that was previously rendered once and never touched again — the manifest, the facts
-strip, the toolkit rows, the timetable, the board's slats — now answers. The board is the one place
+strip, the toolkit rows, the board's slats — now answers. The board is the one place
 that answers *selectively*: hovering a row lights its status cell, **except** the live row, because
 exactly one thing on this page is running and a hover must not repaint that away.
+
+Which row is live follows what is actually running. While the Samsung track ran it was Training.
+With every programme finished, it is **Get in touch** — `boarding` — because the job left open is
+the visitor's, and it is the last row a recruiter takes.
 
 ### The readouts
 
@@ -264,13 +278,11 @@ Real figures, or they are not on the page (rule 6).
   down across the *top* edge and takes `--chrome-acc`: the bar is safety yellow end to end, so the
   wall's yellow fill would be invisible on it, and at the foot it would merge with the bar's own
   bottom keyline into one thick line.
-- **Course position.** `session N of M · X%`, off the same agenda dates the timetable already
-  derives, with the bar drawn from the number that is printed beside it so the graphic cannot
-  disagree with the text.
-- **Midnight.** Every date hangs off a `today` computed once at load, so a tab left open overnight
-  would keep yesterday's module marked as running. The page re-derives at the local day boundary
-  and re-renders the three sections that read dates. The board is rebuilt; the arrival is *not*
-  re-run, because it already happened.
+
+The live Samsung timetable, its `session N of M` progress bar and the midnight re-derive that kept
+it honest were all retired in November 2026, when the course finished. A completed agenda is
+history; the course plate says it in one line. Nothing on the work page reads today's date any
+more, which is why `core.js` no longer exports `today`, `day` or `fmt`.
 
 ### The part index
 
@@ -354,11 +366,11 @@ Narrow screens drop columns; the type holds.
 | Width | What changes |
 |---|---|
 | ≤1080px | gutters tighten to 32px |
-| ≤1020px | training and contact stack; the timetable stops being sticky; the two arcade panels stack |
+| ≤1020px | contact stacks; the two arcade panels stack |
 | ≤940px | hero stacks; the portrait drops its crop and shows the whole frame, capped at 460px |
 | ≤900px | the rail lies down into a 56px top bar with a burger and a sheet; its clip is released; the hero's top padding tightens |
-| ≤860px | the board drops its Detail column; project stages, toolkit and the doorway go single-column; the project meta chip becomes a full-width line |
-| ≤620px | gutters 20px; the offset drops to 5px; form pairs, project headers and the small-builds rows stack |
+| ≤860px | the board drops its Detail column; project stages, the training rack, toolkit and the doorway go single-column; the project meta chip becomes a full-width line |
+| ≤620px | gutters 20px; the offset drops to 5px; form pairs, project headers and the small-builds rows stack; project readouts tighten to two-up |
 | ≤520px | the board drops its header and each row becomes a stacked slat |
 | ≤440px | the Clash deck goes 4→2 columns |
 
@@ -384,9 +396,43 @@ is a five-file edit.
 
 **Two runtime dependencies, both with a real fallback.** The contact form posts to Web3Forms with
 the access key at the foot of `js/data.js`; the key is safe in public JavaScript because it only
-permits sending to the owner's own inbox. The YouTube panel races four public CORS proxies against
-the channel RSS feed and falls back to `YOUTUBE.fallbackVideoId` when none answer, so the panel
-never shows an error box.
+permits sending to the owner's own inbox.
+
+The YouTube panel never depends on a third party at the moment someone opens it. It used to race
+four public CORS proxies against the channel's RSS feed, and both halves failed: the proxies go
+down, and since late 2026 YouTube's `feeds/videos.xml` answers 404 for *every* channel. Now:
+
+| Layer | What | Fails when |
+|---|---|---|
+| Snapshot | `data/youtube.js` (sets `window.YT_SNAPSHOT`) + the avatar saved over `Images/yeagx_logo.jpg`; a plain `<script>`, so it is in memory before `youtube.js` runs, from a server or from disk | the file is missing — effectively never |
+| Live | `api/youtube`, a Vercel function, CDN-cached 30 min with a day of stale-while-revalidate | Vercel and every source below are down at once, on a cold cache |
+| Last resort | `YOUTUBE.fallbackVideoId` | both of the above |
+
+Server-side, `api/_youtube.js` tries three sources in order: the YouTube Data API v3 when
+`YOUTUBE_API_KEY` is set (the dependable one), then the channel's `/videos` page (its embedded
+`ytInitialData`, with exact dates off each watch page), then the RSS feed in case it returns. The
+channel id is fixed there rather than read from the request, so the endpoint cannot become an open
+proxy, and it must match `YOUTUBE.channelId`.
+
+The snapshot is refreshed every six hours by `.github/workflows/youtube-sync.yml`, which commits
+only when the channel changed, and by hand with `node scripts/youtube-sync.js`. A failed run writes
+nothing, so it can never replace a good snapshot with an empty one. Two things to know: GitHub
+pauses scheduled workflows after 60 days with no commits to the repo (re-enable it from the Actions
+tab — the live endpoint covers the gap meanwhile), and the same `YOUTUBE_API_KEY` belongs in both
+the repo's Actions secrets and Vercel's environment variables. Under `python -m http.server` there is
+no `api/`, so the panel shows the snapshot and says `saved`.
+
+The frame is a **poster, not a player**: the upload's own thumbnail as a real link to it, with a
+plate-built play control. It becomes a `youtube-nocookie` player only when someone presses play, with
+`referrerpolicy="strict-origin-when-cross-origin"` spelled out, because YouTube refuses an embed that
+arrives without a Referer — its "error 153", which is what every page opened from disk produced. On
+`file://` play stays the link it already is and opens YouTube, so the broken player card can never
+reach the page. The snapshot job reads only the long-form uploads (`UULF…`, the Videos tab), so a
+Short never displaces a real upload, and every source agrees on the list.
+
+The two arcade panels are **always one height**, side by side or stacked: `grid-auto-rows: 1fr` with
+stretched rows resolves every row to the taller panel. The spare height opens above each panel's last
+block, so the shorter one ends on its footer — the upload list, the Clash note — never on a void.
 
 **Running it.** `python -m http.server 5174`. No build step, no `npm install`, no bundler.
 
@@ -410,6 +456,15 @@ credible than an implied solo one, and it is the version that survives a reader 
 Note that the page now carries two graduation projects — the CS degree's (DocMind, AASTMT) and the
 DEPI track's (the F1 warehouse). Each names its programme, which is what keeps them apart; the rack
 label `Graduation project · Computer Science · AASTMT` is doing that work and should not be shortened.
+
+That makes three graduation projects as of November 2026: Smart Grid Monitor is the Samsung
+Innovation Campus track's, and its meta chip says `SIC graduation project` for the same reason. Every
+figure on its plate comes from that repo's README — the 25 planted and 25 found, 9,649,221 meter
+messages, 15 dbt tests, the 15-minute Airflow cycle — and its `My part` is the README's own team
+table: cloud, integration, orchestration and serving. Detection (dbt) and the Spark jobs were
+teammates' work, and the plate does not claim them. The README's own caveat that the rules are tuned
+to the simulator is kept on the page as well, because a 100% score with no caveat reads as a
+number nobody checked.
 
 ## Rules a future edit must not break
 

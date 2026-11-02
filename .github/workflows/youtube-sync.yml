@@ -1,0 +1,51 @@
+# Refreshes data/youtube.js and Images/yeagx_logo.jpg from the channel.
+# Commits only when something actually changed (a new upload, a new
+# avatar), so it does not fill the history with no-op commits. Each
+# commit to main redeploys the site, which is how the snapshot goes live.
+name: YouTube snapshot
+
+on:
+  schedule:
+    - cron: '23 */6 * * *'    # every six hours
+  workflow_dispatch:           # and on demand, from the Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: youtube-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Read the channel
+        env:
+          # Optional. Without it the job reads the channel page instead.
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node scripts/youtube-sync.js
+
+      - name: Commit if changed
+        run: |
+          if [ -z "$(git status --porcelain -- data/youtube.js Images/yeagx_logo.jpg)" ]; then
+            echo "Nothing new on the channel."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898499+github-actions[bot]@users.noreply.github.com"
+          git add data/youtube.js Images/yeagx_logo.jpg
+          git commit -m "Update YouTube snapshot"
+          # main may have moved while this ran; replay on top and retry
+          for i in 1 2 3; do
+            git pull --rebase origin "$GITHUB_REF_NAME" && git push origin HEAD:"$GITHUB_REF_NAME" && exit 0
+            sleep 5
+          done
+          exit 1

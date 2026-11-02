@@ -24,7 +24,7 @@ The product is a personal portfolio with a strong technical identity: a hand-bui
 
 ## Operating Context
 
-The portfolio is a static web site served as plain files, intended to run without a framework or package install. It is used in a browser, usually from desktop or mobile, and content is maintained primarily in the data file that drives the page. The site includes contact functionality through a public form service and a public YouTube feed that is proxied client-side.
+The portfolio is a static web site served as plain files, intended to run without a framework or package install. It is used in a browser, usually from desktop or mobile, and content is maintained primarily in the data file that drives the page. The site includes contact functionality through a public form service and a YouTube panel fed by a saved snapshot plus a small Vercel function.
 
 ## Capabilities and Constraints
 
@@ -32,7 +32,7 @@ The portfolio is a static web site served as plain files, intended to run withou
 - Static hosting is the default model; no build pipeline is required
 - Content is centralized in js/data.js and rendered by vanilla JavaScript
 - Contact form depends on a public Web3Forms access key to send messages
-- YouTube section uses a CORS proxy and a fallback video when the feed is unavailable
+- YouTube section renders from a saved snapshot (data/youtube.js, refreshed by a scheduled GitHub Action) and upgrades from a Vercel function (api/youtube); no public proxies
 - Project content and training history are factual records that should remain accurate and current
 - The portfolio is not a SaaS product or CMS-backed app; it is a personal portfolio site
 

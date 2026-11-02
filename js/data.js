@@ -32,26 +32,36 @@ const PROFILE = {
 
 /* ---------- what I'm doing now ---------- */
 const NOW = {
-  title:   'Big Data Track — full time',
-  company: 'Samsung Innovation Campus',
-  shortCompany: 'Samsung IC',
-  when:    'June 2026 — present',
-  where:   'Cairo, Egypt',
-  body:    'A data engineering programme run across the whole pipeline, four hours a session, three ' +
-           'sessions a week. Ingestion and storage, distributed processing on Hadoop and Spark, ' +
-           'warehousing and dimensional modeling, then streaming, cloud and governance. The timetable ' +
-           'on the training section below is the real agenda, and it shows the module I am in today.',
-  tools:   ['Hadoop / HDFS', 'PySpark', 'Apache Hive', 'Sqoop', 'Apache NiFi', 'Kafka'],
+  title:   'Open to work — data engineering',
+  status:  'Available now',
+  short:   'Open to data engineering roles',
+  when:    'November 2026',
+  where:   'Cairo · remote',
+  body:    'The degree finished in June 2026 and the Samsung Innovation Campus big data track in October, ' +
+           'so for the first time in four years I am not enrolled in anything. What I want next is a data ' +
+           'engineering role: ingestion, warehousing and orchestration, and the tests that say whether the ' +
+           'numbers can be trusted.',
+  tools:   ['Apache Kafka', 'Apache Spark', 'Snowflake', 'dbt', 'Apache Airflow', 'Apache Hive'],
   note: {
-    h: 'What I have built in it so far',
-    p: 'The capstone: an end-to-end churn pipeline over four disconnected banking sources. I owned the ' +
-       'Hive warehouse, the monthly churn KPI and the orchestration. It is the first project in the ' +
-       'list below, and the first thing I have built that is data engineering rather than analysis.'
+    h: 'The latest thing I shipped',
+    p: 'Smart Grid Monitor, the SIC graduation project: a streaming pipeline over 100,000 simulated smart ' +
+       'meters that found all 25 planted grid threats with no false alarms. I owned the cloud setup, the ' +
+       'end-to-end integration, the Airflow orchestration and the serving layer. It is the first project ' +
+       'in the list below.'
   }
 };
 
-/* ---------- the role before this one ---------- */
+/* ---------- what came before this, newest first ---------- */
 const PAST = [
+  {
+    role:    'Big Data Engineering Track — full time',
+    company: 'Samsung Innovation Campus',
+    when:    'June — Oct 2026',
+    note:    '43 four-hour sessions across the whole pipeline, three a week. ' +
+             'It produced the first two projects below: the churn pipeline as the capstone, and Smart Grid ' +
+             'Monitor as the graduation project.',
+    tools:   ['Hadoop / HDFS', 'Apache Spark', 'Apache Hive', 'Apache NiFi', 'Apache Kafka', 'Snowflake']
+  },
   {
     role:    'Intern — AI-Driven Automation & Core Banking',
     company: 'Finnovate (ICT Misr Group)',
@@ -64,42 +74,93 @@ const PAST = [
   }
 ];
 
-/* ---------- data engineering projects ---------- */
+/* ---------- data engineering projects ----------
+   gauge: the figures the build is judged on, printed as a readout
+   strip under the header. Real numbers from the linked repo only —
+   v is the figure, k says what it counts.
+--------------------------------------------------------------- */
 const WORK = [
+  {
+    id: 'grid',
+    name: 'Smart Grid Monitor',
+    sub: 'Smart meters → Kafka → S3 lake → Snowflake → alerts',
+    meta: 'SIC graduation project · 2026 · four-person team',
+    lead: 'A streaming pipeline that watches 100,000 simulated smart electricity meters across Cairo and ' +
+          'Giza and flags three threats to the grid: electricity theft, transformer overload and line ' +
+          'drop. I owned the cloud, the integration that joined the four parts end to end, the ' +
+          'orchestration and the serving layer.',
+    gauge: [
+      { v: '100,000', k: 'smart meters on 500 transformers' },
+      { v: '9.65M',   k: 'readings streamed through Kafka, 0 failed' },
+      { v: '25 / 25', k: 'planted threats found, 0 false alarms' },
+      { v: '15 min',  k: 'Airflow cycle, clean → load → test' }
+    ],
+    blocks: [
+      { h: 'The question',
+        p: 'Where is power being stolen, where is a transformer overheating, and where is the voltage ' +
+           'too low to run anything — every 15 minutes, for a whole city? Real meter data is private, so ' +
+           'the team wrote a simulator that builds the grid, plants 25 problems in it, and writes an ' +
+           'answer key the pipeline never sees. Accuracy is measured against that key, not assumed.' },
+      { h: 'The flow',
+        p: 'Kafka carries meter and transformer readings into Spark Structured Streaming. Bronze on S3 ' +
+           'keeps every message exactly as it arrived, with its topic, partition and offset. Silver is ' +
+           'Delta Lake, de-duplicated with MERGE, with rejected rows sent to a dead-letter queue along ' +
+           'with the reason. Snowflake loads it with COPY INTO, and dbt builds an SCD2 snapshot, a star ' +
+           'schema, the three checks and the KPIs.' },
+      { h: 'My part',
+        p: 'The AWS and Snowflake setup, and joining four people’s parts into one run. The Airflow DAG ' +
+           'repeats the batch half every 15 minutes — clean, load, snapshot, model, test — behind 15 dbt ' +
+           'tests, plus one that fails on purpose to prove the gate stops a bad run. Then the four-page ' +
+           'Power BI dashboard, the web app’s Snowflake integration and pages, and the technical ' +
+           'documentation.' },
+      { h: 'What it found',
+        p: 'All 25 planted threats, with no false alarms and none missed: 100% precision and recall ' +
+           'against the answer key. 24 hours of meter data streams through in about 80 minutes. The ' +
+           'rules are tuned to the simulator’s patterns, though, and real meters would need them tuned ' +
+           'again.' }
+    ],
+    stack: ['Apache Kafka', 'Apache Spark', 'Delta Lake', 'AWS S3', 'Snowflake', 'dbt',
+            'Apache Airflow', 'SCD Type 2', 'Star schema', 'Power BI', 'Docker', 'Python'],
+    links: [
+      { label: 'Pipeline & web app', url: 'https://github.com/yeagx/smart-grid-monitor' }
+    ]
+  },
   {
     id: 'churn',
     name: 'Customer Churn Pipeline',
     sub: 'Four sources → zoned data lake → Hive star schema',
-    meta: 'Samsung IC capstone · 2026 · four-person team',
+    meta: 'SIC capstone · 2026 · four-person team',
     lead: 'An end-to-end big data pipeline for bank customer churn. Four disconnected sources land in a ' +
           'zoned HDFS lake, get cleaned and enriched with PySpark, and are served as a partitioned ' +
           'star-schema dimension through Hive. I owned the warehouse, the KPI layer and the orchestration.',
+    gauge: [
+      { v: '4 → 1',  k: 'sources into one Hive warehouse' },
+      { v: '2,037',  k: 'churned customers, reconciled exactly' },
+      { v: '6m 37s', k: 'idempotent run, end to end' },
+      { v: '4.0×',   k: 'churn lift in the 50 riskiest customers' }
+    ],
     blocks: [
       { h: 'The question',
         p: 'Who is leaving, and what do they have in common? The answer needed four systems that did not ' +
            'talk to each other: customer records in MySQL, support tickets and marketing offers as CSV, ' +
-           'and usage activity as JSON Lines. 10,000 customers, 2,037 of them churned.',
-        dl: 'Scope:', d: '4 disconnected sources → 1 queryable warehouse' },
+           'and usage activity as JSON Lines. 10,000 customers, 2,037 of them churned.' },
       { h: 'The lake',
         p: 'HDFS split into four zones, each with one job. Raw is immutable and never edited, so it stays ' +
            'the audit trail. Clean is typed, deduplicated and referentially valid. Warehouse is ' +
            'feature-enriched and partitioned. Reject quarantines bad rows with the reason attached, ' +
-           'rather than dropping them silently.',
-        dl: 'Shape:', d: 'raw → clean → warehouse, plus a reject zone' },
+           'rather than dropping them silently.' },
       { h: 'My part',
         p: 'The Hive layer and the orchestration. An external Parquet dim_customer at one row per ' +
            'customer, 21 columns, partitioned by geography, with SCD-2 columns carried on it. The monthly ' +
            'churn KPI is a window function rather than a correlated subquery, which Hive will not take in ' +
            'a SELECT list, and it computes the whole running series in one pass. Every stage overwrites, ' +
-           'so the run is idempotent: 6m 37s end to end.',
-        dl: 'Checks:', d: 'reconciles to 2,037 churned, exactly' },
+           'so the run is idempotent and reconciles to the same 2,037 churned every time.' },
       { h: 'What it found',
         p: 'Germany churns at roughly twice the rate of France and Spain — 32.4% against 16.2% and 16.7% ' +
            '— on the same product at the same prices. A random forest over the warehouse scores 0.7997 ' +
-           'ROC AUC, and its riskiest decile churns at 67% against a 20.3% baseline.',
-        dl: 'Found:', d: '4.0× lift on the top decile' }
+           'ROC AUC, and its riskiest decile churns at 67% against a 20.3% baseline.' }
     ],
-    stack: ['Hadoop / HDFS', 'PySpark', 'Apache Hive', 'Sqoop', 'Apache NiFi', 'Parquet', 'MySQL',
+    stack: ['Hadoop / HDFS', 'Apache Spark', 'Apache Hive', 'Sqoop', 'Apache NiFi', 'Parquet', 'MySQL',
             'Star schema', 'SCD Type 2', 'scikit-learn', 'Streamlit'],
     links: [
       { label: 'Pipeline & warehouse', url: 'https://github.com/yeagx/sic-churn-data-pipeline' }
@@ -113,30 +174,31 @@ const WORK = [
     lead: 'Four seasons of Formula 1 race data (2018–2021), cleaned in two passes, modeled into a star ' +
           'schema, then ' +
           'used for both dashboards and a model that predicts the season champion.',
+    gauge: [
+      { v: '2',      k: 'cleaning passes before anything was derived' },
+      { v: '3',      k: 'fact grains in one star schema' },
+      { v: '6',      k: 'engineered metrics the source lacked' },
+      { v: '70–85%', k: 'champion-prediction accuracy' }
+    ],
     blocks: [
       { h: 'Cleaning',
         p: 'The source was one wide table with contradictions in it. First pass fixed invalid pit times ' +
            'and normalised tire-compound naming. Second pass enforced the rule that stints = pit stops + 1, ' +
-           'which exposed broken final-stint values. Only once that held did I derive anything on top.',
-        d: 'contradictory source → stints = pit stops + 1 holds' },
+           'which exposed broken final-stint values. Only once that held did I derive anything on top.' },
       { h: 'The model',
         p: 'A star schema at three grains: Fact_PitStops per event, DriverRace per race, DriverSeason per ' +
            'season. Dimensions for driver, constructor, race and season. Three grains on purpose — the ' +
-           'dashboards read the race grain, the predictor reads the season grain, from one warehouse.',
-        d: '1 wide table → 3 fact grains + 4 dimensions' },
+           'dashboards read the race grain, the predictor reads the season grain, from one warehouse.' },
       { h: 'What I added',
         p: 'Metrics that were not in the source: point efficiency, pit-stop gap against the field, per-lap ' +
-           'aggression, driver consistency, wet versus dry compound strength, and team tire-strategy patterns.',
-        d: '0 → 7 engineered metrics' },
+           'aggression, driver consistency, wet versus dry compound strength, and team tire-strategy patterns.' },
       { h: 'My part',
         p: 'A six-person team, and I worked across the pipeline rather than owning one stage of it: ' +
            'the two cleaning passes, the star schema, the engineered metrics and the predictor. The ' +
-           'schema design is the part I took most out of — it is why I went looking for warehouse work.',
-        dl: 'Team:', d: 'six people · contributed across all four stages' },
+           'schema design is the part I took most out of — it is why I went looking for warehouse work.' },
       { h: 'The prediction',
         p: 'An XGBoost classifier over DriverSeason using average finish, aggression score, pit efficiency ' +
-           'and constructor performance.',
-        d: '70–85% accuracy across historical seasons' }
+           'and constructor performance, scoring 70–85% across historical seasons.' }
     ],
     stack: ['Python', 'Pandas', 'SQL', 'Star schema', 'XGBoost', 'Power BI'],
     links: [
@@ -159,24 +221,26 @@ const GRAD = [
     meta: 'Graduation project · 2025–2026 · graded A+ · seven-person team',
     lead: 'A university platform where students chat with their own course documents. I led the UI/UX ' +
           'and the frontend, in a team of seven across frontend, backend, mobile and the RAG layer.',
+    gauge: [
+      { v: 'A+', k: 'graduation project grade' },
+      { v: '3',  k: 'user roles, Figma to shipped' },
+      { v: '7',  k: 'people across four disciplines' }
+    ],
     blocks: [
       { h: 'What it does',
         p: 'Students upload course material and ask questions against it. Answers come back grounded in ' +
            'their own documents rather than from a general model, with subject-specific tutors and a ' +
-           'multi-role admin dashboard behind it.',
-        d: 'general model → answers grounded in the student’s own files' },
+           'multi-role admin dashboard behind it.' },
       { h: 'My part',
         p: 'Design and frontend: React 19, Vite, Tailwind CSS and Framer Motion, from the Figma work ' +
            'through to the shipped interface, including the analytics and admin views for three ' +
-           'different user roles.',
-        d: 'Figma → shipped interface · 3 user roles' },
+           'different user roles.' },
       { h: 'The data side',
         p: 'The retrieval layer is a document pipeline, and the chunking is structure-aware rather ' +
            'than a fixed window: tables come out as intact Markdown, and section headings are ' +
            'detected by font size and prepended to each chunk as breadcrumbs. Chunks are embedded ' +
            'into PostgreSQL with pgvector, stamped with their material and page, and every answer ' +
-           'cites the slide it came from.',
-        dl: 'Shape:', d: 'PDF / PPTX → tables + headings → cited chunks' }
+           'cites the slide it came from.' }
     ],
     stack: ['React 19', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Recharts', 'FastAPI',
             'SQLAlchemy 2', 'PostgreSQL 16', 'pgvector', 'Gemini API', 'RAG'],
@@ -204,14 +268,14 @@ const TOOLKIT = [
     items: [ {n:'Python'}, {n:'SQL'}, {n:'Java'}, {n:'C / C++'}, {n:'PHP'}, {n:'R'}, {n:'JavaScript'} ] },
 
   { group: 'Databases & warehousing',
-    items: [ {n:'PostgreSQL'}, {n:'MySQL'}, {n:'pgvector'}, {n:'Star schema'},
+    items: [ {n:'PostgreSQL'}, {n:'MySQL'}, {n:'Snowflake'}, {n:'dbt'}, {n:'pgvector'}, {n:'Star schema'},
              {n:'Dimensional modeling'}, {n:'SCD Type 2'}, {n:'ETL / ELT'}, {n:'Sqoop'}, {n:'Parquet'}, {n:'Apache Hive'},
-             {n:'NoSQL', learning:true} ] },
+             {n:'NoSQL'} ] },
 
   { group: 'Big data',
-    items: [ {n:'Apache Spark'}, {n:'Hadoop / HDFS'},
-             {n:'Apache Kafka', learning:true}, {n:'Apache NiFi'},
-             {n:'Databricks', learning:true}, {n:'Snowflake', learning:true} ] },
+    items: [ {n:'Apache Spark'}, {n:'Hadoop / HDFS'}, {n:'Apache Kafka'}, {n:'Delta Lake'},
+             {n:'Apache NiFi'}, {n:'Apache Airflow'}, {n:'AWS S3'},
+             {n:'Databricks'} ] },
 
   { group: 'Analysis & BI',
     items: [ {n:'Power BI'}, {n:'Streamlit'}, {n:'Excel / Power Query'}, {n:'Pandas'}, {n:'NumPy'} ] },
@@ -227,16 +291,19 @@ const TOOLKIT = [
     items: [ {n:'Git & GitHub'}, {n:'Docker'}, {n:'Linux'}, {n:'VS Code'} ] }
 ];
 
-/* ---------- training ---------- */
+/* ---------- training ----------
+   current: true  → a programme still running (its plate takes the live offset)
+--------------------------------------------------------------- */
 const TRAINING = [
   {
     id: 'sic',
-    name: 'Big Data Track',
+    name: 'Big Data Engineering Track',
     org: 'Samsung Innovation Campus',
-    when: 'June 2026 — present',
-    current: true,
-    body: 'Data engineering programme across the full pipeline: ingestion, storage, distributed ' +
-          'processing, warehousing, streaming and cloud, ending in a capstone project.'
+    when: 'June — Oct 2026 · 43 sessions',
+    body: 'Full time, across the whole pipeline: Linux, Docker and SQL/NoSQL first, then Hadoop and ' +
+          'Spark, warehousing and dimensional modeling, Hive and NiFi, streaming on Kafka and Flink, ' +
+          'AWS, Azure and Databricks, governance and monitoring, dbt and Snowflake, and data visualization to close. ' +
+          'Finished with the churn capstone and Smart Grid Monitor as the graduation project.'
   },
   {
     id: 'depi',
@@ -264,90 +331,23 @@ const TRAINING = [
 ];
 
 
-/* ---------- SIC syllabus ----------
-   The full BD 802 agenda. Module ranges, the module I am currently in,
-   and the next session are all DERIVED from these dates at page load —
-   nothing here needs editing as the course runs.
-   sessions: [ session#, module#, topic, ISO date, hours ]
------------------------------------------------------------------- */
-const SIC = {
-  name: 'Samsung Innovation Campus — Big Data',
-  modules: [
-    { n: 1,  name: 'Foundations & tooling' },
-    { n: 2,  name: 'SQL & NoSQL' },
-    { n: 3,  name: 'Distributed processing' },
-    { n: 4,  name: 'Warehousing & modeling' },
-    { n: 5,  name: 'Hive & ingestion' },
-    { n: 6,  name: 'Streaming' },
-    { n: 7,  name: 'Cloud' },
-    { n: 8,  name: 'Governance & practices' },
-    { n: 9,  name: 'Deploy & monitoring' },
-    { n: 10, name: 'DataOps & modern stack' },
-    { n: 11, name: 'Visualization' }
-  ],
-  sessions: [
-    [1,  1,  'Introduction to Big Data',            '2026-07-26', 4],
-    [2,  1,  'Linux & Git',                         '2026-07-28', 4],
-    [3,  1,  'Python revision',                     '2026-07-30', 4],
-    [4,  1,  'Docker',                              '2026-07-31', 4],
-    [5,  2,  'SQL revision & tricks',               '2026-08-02', 4],
-    [6,  2,  'NoSQL fundamentals',                  '2026-08-04', 4],
-    [7,  2,  'NoSQL practical',                     '2026-08-06', 4],
-    [8,  3,  'Hadoop #1',                           '2026-08-07', 4],
-    [9,  3,  'Hadoop #2',                           '2026-08-09', 4],
-    [10, 3,  'Spark #1',                            '2026-08-11', 4],
-    [11, 3,  'Spark #2',                            '2026-08-13', 4],
-    [12, 3,  'Spark #3',                            '2026-08-14', 4],
-    [13, 3,  'Spark #4 — review',                   '2026-08-16', 4],
-    [14, 4,  'Data warehouse fundamentals',         '2026-08-18', 4],
-    [15, 4,  'Data modeling #1',                    '2026-08-20', 4],
-    [16, 4,  'Data modeling #2',                    '2026-08-23', 4],
-    [17, 4,  'ELT & ETL',                           '2026-08-25', 4],
-    [18, 5,  'Apache Hive #1',                      '2026-08-27', 4],
-    [19, 5,  'Apache Hive #2',                      '2026-08-30', 4],
-    [20, 5,  'Project #1 — NiFi on a VM',           '2026-09-01', 4],
-    [21, 5,  'Project #2 — on a VM',                '2026-09-03', 4],
-    [22, 5,  'Capstone project #1',                 '2026-09-04', 10],
-    [23, 6,  'Streaming fundamentals',              '2026-09-06', 4],
-    [24, 6,  'Apache Spark Streaming',              '2026-09-08', 4],
-    [25, 6,  'Apache Kafka',                        '2026-09-10', 4],
-    [26, 6,  'Apache Flink',                        '2026-09-13', 4],
-    [27, 7,  'Cloud fundamentals',                  '2026-09-15', 4],
-    [28, 7,  'AWS cloud #1',                        '2026-09-17', 4],
-    [29, 7,  'AWS cloud #2',                        '2026-09-20', 4],
-    [30, 7,  'Azure cloud',                         '2026-09-22', 4],
-    [31, 7,  'Databricks',                          '2026-09-24', 4],
-    [32, 8,  'Data governance & security',          '2026-09-25', 4],
-    [33, 8,  'Big data engineering best practices', '2026-09-27', 4],
-    [34, 9,  'Deployment',                          '2026-09-29', 4],
-    [35, 9,  'Monitoring fundamentals',             '2026-10-01', 4],
-    [36, 9,  'Grafana',                             '2026-10-04', 4],
-    [37, 10, 'DataOps & MLOps',                     '2026-10-06', 4],
-    [38, 10, 'Big data trends #1',                  '2026-10-08', 4],
-    [39, 10, 'Big data trends #2',                  '2026-10-11', 4],
-    [40, 10, 'dbt, Airbyte & Fivetran',             '2026-10-13', 4],
-    [41, 10, 'Snowflake',                           '2026-10-15', 4],
-    [42, 11, 'Data visualization #1',               '2026-10-18', 4],
-    [43, 11, 'Data visualization #2',               '2026-10-20', 4]
-  ]
-};
-
 /* ---------- YouTube ---------- */
 const YOUTUBE = {
   channelId: 'UCyrZcIzWhSUJUxpa5mzYF9w',
   handle: 'YeagX',
   url: 'https://www.youtube.com/@YeagX',
 
-  // Replace Images/yeagx_logo.jpg with your current channel picture.
-  // If the live feed loads, the real channel avatar overrides this anyway.
+  // Kept current automatically: scripts/youtube-sync.js saves the channel
+  // picture over this file whenever it changes. The channel id itself is
+  // also set in api/_youtube.js — change both together.
   logo: 'Images/yeagx_logo.jpg',
 
   blurb: 'I run a small tech channel. It is mostly practice at explaining something technical to ' +
          'someone who is not already in the room with me.',
 
-  // The feed is read through a public CORS proxy and those go down sometimes.
-  // Put one of your video IDs here (the part after v= in a watch URL) so the
-  // player always shows a real video instead of an error.
+  // Last resort only, if both the saved snapshot (data/youtube.js) and the
+  // live endpoint fail — which in practice means the snapshot file is missing.
+  // One of your video IDs: the part after v= in a watch URL.
   fallbackVideoId: 'Doi5B7cjK_0'
 };
 
