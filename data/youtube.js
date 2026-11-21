@@ -4,7 +4,7 @@ window.YT_SNAPSHOT = {
   "videos": [
     {
       "id": "cI1UH_yW3PQ",
-      "title": "التليفونات المَـتـنـيـة لمؤاخذة...",
+      "title": "The Foldable Phones, Excuse My Language...",
       "published": "2026-10-03T15:00:05.000Z",
       "exact": true
     },
