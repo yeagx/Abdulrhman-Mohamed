@@ -3,8 +3,14 @@ window.YT_SNAPSHOT = {
   "avatarUrl": "https://yt3.googleusercontent.com/E3dBYaVWFQ-v26yBK3OPZl-xghR5Zp74GVGWsZxntyTq7ccbWJYGDsTgcvcfxfKJ4k4bg9jCyg=s900-c-k-c0x00ffffff-no-rj",
   "videos": [
     {
+      "id": "QQMtbdck3Hk",
+      "title": "I woke up...",
+      "published": "2026-11-22T16:51:44.386Z",
+      "exact": false
+    },
+    {
       "id": "cI1UH_yW3PQ",
-      "title": "التليفونات المَـتـنـيـة لمؤاخذة...",
+      "title": "The Foldable Phones, Excuse My Language...",
       "published": "2026-10-03T15:00:05.000Z",
       "exact": true
     },
@@ -18,12 +24,6 @@ window.YT_SNAPSHOT = {
       "id": "ysJ4ItHyvgI",
       "title": "بيقولك اصل انا مبستخدمش ال AI",
       "published": "2026-09-14T15:00:30.000Z",
-      "exact": true
-    },
-    {
-      "id": "OXxFjTfjygg",
-      "title": "هل انت فعلا كلية احلامك حاسبات؟",
-      "published": "2026-08-14T14:15:28.000Z",
       "exact": true
     }
   ]
