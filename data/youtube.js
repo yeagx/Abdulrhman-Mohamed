@@ -1,6 +1,6 @@
 /* Written by scripts/youtube-sync.js — do not edit by hand. */
 window.YT_SNAPSHOT = {
-  "avatarUrl": "https://yt3.googleusercontent.com/E3dBYaVWFQ-v26yBK3OPZl-xghR5Zp74GVGWsZxntyTq7ccbWJYGDsTgcvcfxfKJ4k4bg9jCyg=s900-c-k-c0x00ffffff-no-rj",
+  "avatarUrl": "https://yt3.googleusercontent.com/ZdMQ9wA9wqm1PxNr0vpVjD-RAwMXQGjNefF9Z-bC6Fm6QRolpmr5tOFE7KfxZpqdXQEuStWzwMk=s900-c-k-c0x00ffffff-no-rj",
   "videos": [
     {
       "id": "QQMtbdck3Hk",
