@@ -5,12 +5,12 @@ window.YT_SNAPSHOT = {
     {
       "id": "QQMtbdck3Hk",
       "title": "I woke up...",
-      "published": "2026-11-22T16:51:44.386Z",
-      "exact": false
+      "published": "2026-11-22T16:00:18.000Z",
+      "exact": true
     },
     {
       "id": "cI1UH_yW3PQ",
-      "title": "التليفونات المَـتـنـيـة لمؤاخذة...",
+      "title": "The Foldable Phones, Excuse My Language...",
       "published": "2026-10-03T15:00:05.000Z",
       "exact": true
     },
