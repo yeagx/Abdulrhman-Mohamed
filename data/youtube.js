@@ -3,6 +3,12 @@ window.YT_SNAPSHOT = {
   "avatarUrl": "https://yt3.googleusercontent.com/ZdMQ9wA9wqm1PxNr0vpVjD-RAwMXQGjNefF9Z-bC6Fm6QRolpmr5tOFE7KfxZpqdXQEuStWzwMk=s900-c-k-c0x00ffffff-no-rj",
   "videos": [
     {
+      "id": "l5q9jOuDNl4",
+      "title": "فعّل Tap to Pay على Android في مصر! ادفع بموبايلك بدل الفيزا 💳",
+      "published": "2026-11-25T17:51:12.177Z",
+      "exact": false
+    },
+    {
       "id": "QQMtbdck3Hk",
       "title": "I woke up...",
       "published": "2026-11-22T16:00:18.000Z",
@@ -18,12 +24,6 @@ window.YT_SNAPSHOT = {
       "id": "BekWfXSLlqc",
       "title": "كل الي محتاجة تعرفه عن منحة  Samsung Innovation Campus (SIC)!",
       "published": "2026-09-15T15:00:37.000Z",
-      "exact": true
-    },
-    {
-      "id": "ysJ4ItHyvgI",
-      "title": "بيقولك اصل انا مبستخدمش ال AI",
-      "published": "2026-09-14T15:00:30.000Z",
       "exact": true
     }
   ]
