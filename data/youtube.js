@@ -4,7 +4,7 @@ window.YT_SNAPSHOT = {
   "videos": [
     {
       "id": "l5q9jOuDNl4",
-      "title": "فعّل Tap to Pay على Android في مصر! ادفع بموبايلك بدل الفيزا 💳",
+      "title": "Activate Tap to Pay on Android in Egypt! Pay with your phone instead of your card 💳",
       "published": "2026-11-25T17:51:12.177Z",
       "exact": false
     },
@@ -16,7 +16,7 @@ window.YT_SNAPSHOT = {
     },
     {
       "id": "cI1UH_yW3PQ",
-      "title": "التليفونات المَـتـنـيـة لمؤاخذة...",
+      "title": "The Foldable Phones, Excuse My Language...",
       "published": "2026-10-03T15:00:05.000Z",
       "exact": true
     },
