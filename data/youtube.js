@@ -10,7 +10,7 @@ window.YT_SNAPSHOT = {
     },
     {
       "id": "QQMtbdck3Hk",
-      "title": "I woke up...",
+      "title": "انا صحيت...",
       "published": "2026-11-22T16:00:18.000Z",
       "exact": true
     },
